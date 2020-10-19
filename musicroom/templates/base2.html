@@ -1,0 +1,249 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <title>MusicRoom</title>
+</head>
+<body>
+    <nav class="sidebar">
+        <div class="brand">
+           <h1>MusicRoom</h1>
+        </div>
+        <div class="menu main-menu">
+            <div class="menu--item active">
+                <a href="{% url 'index' %}">
+                    <i class="lni-home"></i> <span class="menu--item--text">Home</span>
+                </a>
+            </div>
+            <div class="menu--item">
+                <a href="#">
+                    <i class="lni-search"></i> <span class="menu--item--text">Search</span>
+                </a>
+            </div>
+            <div class="menu--item">
+                <a href="#">
+                    <i class="lni-library"></i> <span class="menu--item--text">Library</span>
+                </a>
+            </div>
+        </div>
+        <p class="sidebar--header">PLAYLIST</p>
+        <div class="menu menu-extra">
+            <div class="menu--item">
+                <a href="#">
+                    <img src="http://via.placeholder.com/32x32" alt="">
+                    <span class="menu--item--text">Create a playlist</span>
+                </a>
+            </div>
+            <div class="menu--item">
+                <a href="#">
+                    <img src="http://via.placeholder.com/32x32" alt="">
+                    <span class="menu--item--text">Songs that you like</span>
+                </a>
+            </div>
+        </div>
+        <div class="separator"></div>
+        <div class="menu menu-playlist">
+            <div class="menu--item">
+                <a href="#">
+                    <span class="menu--item--text">Dev</span>
+                </a>
+            </div>
+            <div class="menu--item">
+                <a href="#">
+                    <span class="menu--item--text">That playlist that I really liked from the show</span>
+                </a>
+            </div>
+        </div>
+        <div class="sidebar--download-app">
+            <a href="#">
+                <i class="lni-arrow-down-circle"></i> <span>Install the app</span>
+            </a>
+        </div>
+    </nav>
+    <div class="header">
+        <div class="header--bg"></div>
+        <div class="header--actions">
+            <div class="header--buttons">
+                <button class="header--button previous"><i class="lni-chevron-left"></i></button>
+                <button class="header--button next"><i class="lni-chevron-right"></i></button>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropdown--button">
+                <span class="user-icon"><i class="lni-user"></i></span>
+                <span class="text-bold">{{request.user}}</span>
+                <span><i class="lni-chevron-down"></i></span>
+            </button>
+            <ul class="dropdown--content">
+                <li><a href="{% url 'profile' %}" style="text-decoration: none; color: green;"><strong>Account</strong></a></li>
+                <li><a href="{% url 'logoutUser' %}" style="text-decoration: none; color: green;"><strong>Logout</strong></a></li>
+            </ul>
+        </div>
+    </div>
+    {% block content %}
+
+    {% endblock %}
+    <div class="bottom-bar">
+        <div class="bottom-bar--left-col">
+            <div class="bottom-bar--left-col--song">
+                <div class="bottom-bar--left-col--song--img">
+                    <div class="bottom-bar--left-col--song--img--pull-up">
+                        <i class='lni lni-chevron-up'></i>
+                    </div>
+                    <img src="http://via.placeholder.com/150x150" alt="">
+                </div>
+                <div class="bottom-bar--left-col--song--details">
+                    <div class="bottom-bar--left-col--song--details--wrapper">
+                        <a href="#" class="bottom-bar--left-col--song--details--title">Song Title</a>
+                    </div>
+                    <div class="bottom-bar--left-col--song--details--wrapper">
+                        <a href="#" class="bottom-bar--left-col--song--details--artist">Artist</a>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-bar--left-col--actions">
+                <button class="bottom-bar--left-col--actions--favorite">
+                    <i class='lni lni-heart'></i>
+                </button>
+                <button class="bottom-bar--left-col--actions--pip">
+                    <i class="pip-icon"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded",() => {
+            /* Catch user click event on anywhere on the page */
+            document.querySelector('body').addEventListener('click', e => {
+                /* Close all the dropdowns */
+                document.querySelectorAll('.dropdown.open').forEach(item => {
+                    item.classList.remove('open');
+                });
+            });
+
+            /* Get all the dropdowns in the page */
+            document.querySelectorAll('.dropdown').forEach(item => {
+                /*
+                    When user clicks on a dropdown => then toggle the .open class.
+                    .open class is responsible for opening / closing a dropdown
+                */
+                item.addEventListener('click', e => {
+                    // e.preventDefault();
+                    e.stopPropagation();
+                    /* Find the closest dropdown */
+                    const dropdown = e.target.closest('.dropdown');
+                    if(!dropdown) return;
+                    if (dropdown.classList.contains('open')) {
+                        dropdown.classList.remove('open');
+                    } else {
+                        dropdown.classList.add('open');
+                    }
+                });
+            });
+
+            /* Get all the left sidebar's menu items */
+            document.querySelectorAll('.main-menu .menu--item').forEach(item => {
+                /*
+                    When user clicks on a menu item => then toggle the .active class.
+                    .active class is responsible for adding the background to the menu--item
+                */
+                item.addEventListener('click', e => {
+                    // e.preventDefault();
+                    const menu_item = e.target.closest('.menu--item');
+                    if(!menu_item) return;
+                    /* Remove all the active menu--items  */
+                    document.querySelectorAll('.main-menu .menu--item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    /* "Activate" the click menu--item */
+                    menu_item.classList.add('active');
+                });
+            });
+
+
+            const headerHeight = document.querySelector('.header').offsetHeight;
+            const opaqueThreshold = (headerHeight * 2);
+            const _main_el = document.querySelector('main');
+            _main_el.addEventListener('scroll', (e) => {
+                /* Get the vertical scroll position of the 'main' element */
+                const scrollTop = _main_el.scrollTop;
+                const _header_bg_el = document.querySelector('.header--bg');
+                /*
+                    Set the opacity of the top bar
+                    depending on the current scroll position
+                    of the main element
+                */
+                let opacity = scrollTop / opaqueThreshold;
+                if(opacity > 1) opacity = 1;
+                _header_bg_el.style.opacity = opacity;
+            });
+
+            const _input_els = document.querySelectorAll('.input-group.can-delete input');
+            _input_els.forEach(_el => {
+                _el.addEventListener('input', (e) => {
+                    const value = _el.value;
+                    const _clear_icon_el = _el.parentNode.querySelector('.clear--search');
+                    console.log(_clear_icon_el);
+                    if(value.length == 0) {
+                        _clear_icon_el.style.zIndex = '0';
+                    } else {
+                        _clear_icon_el.style.zIndex = '2';
+                    }
+                });
+            });
+
+            const _clear_icon_els = document.querySelectorAll('.clear--search');
+            _clear_icon_els.forEach(_el => {
+                _el.addEventListener('click', (e) => {
+                    const _clear_icon_el = e.target;
+                    const _input_el = e.target.parentNode.querySelector('input');
+                    if(_input_el) {
+                        _input_el.value = '';
+                    }
+                });
+            });
+
+            const _play_pause_els = document.querySelectorAll('.section--body--item--play');
+            _play_pause_els.forEach(_el => {
+                _el.addEventListener('click', (e) => {
+                    _play_pause_els.forEach(_el2 => {
+                        if(_el != _el2) {
+                            _el2.classList.remove('active');
+                            const _icon_el2 = _el2.querySelector('i');
+
+                            if(_icon_el2) {
+                                _icon_el2.classList.remove('lni-pause')
+                                _icon_el2.classList.add('lni-play');
+                            }
+                        }
+                    });
+                    
+                    _el.classList.toggle('active');
+
+                    const _icon_el = _el.querySelector('i');
+                    if(_icon_el) {
+                        if(_icon_el) {
+                            if(_el.classList.contains('active')) {
+                                _icon_el.classList.remove('lni-play');
+                                _icon_el.classList.add('lni-pause');
+                            } else {
+                                _icon_el.classList.remove('lni-pause')
+                                _icon_el.classList.add('lni-play');
+                            }
+                        }
+                    }
+
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

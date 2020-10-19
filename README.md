@@ -24,3 +24,15 @@ ever, depending on the part you’re interested in, you should also validate tho
 • Backend part - Hypertube
 
 # How to Run
+
+* make sure to run the app on http://localhost:8000 for the oauth2 to work proper follow the following cmds
+
+# RUN
+
+~ python3 manage.py makemigrations
+
+~ python3 manage.py migrate
+
+~ python3 manage.py runserver localhost:8000
+
+

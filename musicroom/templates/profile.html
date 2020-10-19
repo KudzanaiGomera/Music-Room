@@ -1,0 +1,44 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+
+<main>
+    <section class="section">
+        <style>
+            .btnbutton {
+                background-color: green; 
+                color: white;
+                text-decoration: none;
+                border: none;
+                text-align: center;
+                display: inline-block;
+                font-size:16px;
+                margin: 4px 2px;
+                border-radius: 8px;
+            }
+        </style>
+        
+        <br>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card card-body" style="background-color: transparent;color: #fff">
+                    <a class="btnbutton" href="{% url 'index' %}"> &#8592; Back to Home </a>
+                    <h3 style="text-align: center">Account Settings</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="card card-body">	
+                    <form method="POST" action="" enctype="multipart/form-data" style="color: white;">
+                        {% csrf_token %}
+                        {{u_form.as_p}}
+                        {{p_form.as_p}}
+                    <input class="btn btn-primary" type="submit" name="Update Information">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+{% endblock %}

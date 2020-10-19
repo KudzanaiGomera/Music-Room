@@ -1,0 +1,687 @@
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    color: #fff;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: -0.35px;
+}
+
+::root {
+    --main-color: #1db954;
+    --light-color: #1ed760;
+}
+
+.text-bold {
+    font-weight: 700;
+}
+
+.sidebar {
+    background-color: rgba(4, 4, 4);
+    padding: 24px 24px 0 24px;
+    position: fixed;
+    height: 100%;
+    width: 230px;
+}
+
+.sidebar .brand {
+    padding-bottom: 18px;
+}
+
+.sidebar .brand svg {
+    width: 131px;
+}
+
+.sidebar .menu .menu--item {
+    font-size: 1.5rem;
+    position: relative; /* Needed for the .active state to add the background */
+}
+
+.sidebar .menu.menu-extra .menu--item:not(:first-child) {
+    margin-top: 5px;
+}
+
+.sidebar .menu .menu--item a,
+.sidebar .sidebar--download-app a {
+    text-decoration: none;
+    color: #B3B3B3;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    transition: all 350ms;
+}
+
+.sidebar .menu.menu-extra .menu--item a img {
+    opacity: 0.7;
+    transition: all 350ms;
+}
+
+.sidebar .menu.menu-extra .menu--item:hover a img {
+    opacity: 1;
+}
+
+.sidebar .menu .menu--item.active a,
+.sidebar .menu .menu--item:hover a,
+.sidebar .sidebar--download-app:hover a {
+    color: #fff;
+}
+/* Active state of the menu  item, adds a background color to the element */
+.sidebar .menu .menu--item.active:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    height: 100%;
+    left: 8px;
+    left: -16px; /* -(Sidebar's padding left) + 8px */
+    right: -16px; /* -(Sidebar's padding left) + 8px */
+    background: rgb(40, 40, 40);
+    z-index: -1;
+    border-radius: 5px;
+}
+
+.menu--item--text,
+.sidebar--download-app a span {
+    font-size: 0.88rem;
+    font-weight: 700;
+    margin-left: 15px;
+}
+
+.sidebar--header {
+    margin-top: 24px;
+    margin-bottom: 20px;
+    font-size: 0.68rem;
+    letter-spacing: 1.5px;
+    color: #B3B3B3;
+}
+
+.sidebar .separator {
+    height: 1px;
+    width: 100%;
+    border-top: 1px solid #303030;
+    margin-top: 16px;
+}
+
+.sidebar .menu.menu-playlist .menu--item--text {
+    font-weight: 400;
+    margin-left: 0;
+    /*
+        Add ellipsis when the text is bigger than the width of the sidebar
+        Read more: https://developer.mozilla.org/en-US/docs/Web/CSS/text-overflow
+    */
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar .menu.menu-playlist a {
+    cursor: default;
+}
+
+.sidebar--download-app {
+    position: absolute;
+    bottom: 0;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 230px; /* sidebar width */
+    right: 0;
+    height: 60px;
+    padding-left: 24px;
+    padding-right: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 2;
+}
+
+.header--bg {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    background-color: rgb(12, 12, 12);
+    z-index: 0;
+}
+
+.header--buttons {
+    position: relative;
+}
+
+.header--button {
+    background: rgb(7, 7, 7);
+    color: #fff;
+    border: 0;
+    border-radius: 50%;
+    height: 34px;
+    width: 34px;
+    cursor: pointer;
+    outline: 0;
+}
+
+.header--button.previous {
+    margin-right: 10px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown--button {
+    outline: 0;
+    border: 0;
+    color: #fff;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(45, 45, 45);
+    padding: 6px 14px 6px 8px;
+    font-size: 0.75rem;
+    line-height: 0.75rem;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown--button:hover,
+.dropdown.open .dropdown--content li:hover {
+    background-color: rgb(49, 49, 49);
+    color: #fff;
+}
+
+.header .dropdown--button span:not(:last-child) {
+    margin-right: 10px;
+}
+
+.header .dropdown--button .user-icon {
+    font-size: 1.3rem;
+}
+
+.dropdown--content {
+    display: none;
+    position: absolute;
+    list-style: none;
+    right: 0;
+    margin: 10px 0 0 0;
+    padding: 0;
+    width: 160px;
+    background-color: rgb(40, 40, 40);
+    border-radius: 5px;
+    box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.5);
+}
+
+.dropdown.open .dropdown--content {
+    display: block;
+}
+
+.dropdown .dropdown--content li {
+    padding-left: 40px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgb(64, 64, 64);
+    color: #b3b3b3;
+    user-select: none;
+    height: 40px;
+    line-height: 40px;
+}
+
+.dropdown .dropdown--content li:first-child {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.dropdown .dropdown--content li:last-child {
+    border-bottom: 0;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+main {
+    padding: 80px 32px 32px 262px;
+    max-height: 100vh;
+    min-height: 100vh;
+    /* background: dodgerblue; */
+    overflow-y: auto;
+}
+
+main::-webkit-scrollbar {
+    width: 16px;
+}
+
+main::-webkit-scrollbar-thumb {
+    background-color: #909090;
+}
+
+main::-webkit-scrollbar-track {
+    background-color: rgb(18, 18, 18);
+}
+
+
+
+
+/*  PART 3 */
+.header--actions {
+    display: flex;
+    align-items: center;
+}
+
+.header--search {
+    margin-left: 25px;
+    min-width: 360px;
+}
+
+.input-group {
+    position: relative;
+}
+
+.input-group .left-icon {
+    position: absolute;
+    z-index: 2;
+    left: 15px;
+    top: 0;
+    color: #333;
+    font-size: 1.375rem;
+    height: 40px;
+    line-height: 40px;
+}
+
+.input {
+    margin: 0;
+    border: 0;
+    position: relative;
+    z-index: 1;
+    height: 40px;
+    border-radius: 25px;
+    width: 100%;
+    outline: 0;
+}
+
+.input-group.has-left-icon .input {
+    padding-left: 50px;
+}
+
+.input-group.has-right-icon .input {
+    padding-right: 50px;
+}
+
+.input-group .right-icon {
+    position: absolute;
+    z-index: 2;
+    right: 15px;
+    color: #333;
+    font-size: 0.9375rem;
+    height: 40px;
+    line-height: 40px;
+}
+
+.input-group .right-icon.clear--search {
+    z-index: 0;
+}
+
+main {
+    background-color: rgb(18, 18, 18);
+}
+
+.section {
+    margin-bottom: 35px;
+}
+
+.title {
+    font-size: 1.75rem;
+    margin-top: 0;
+    line-height: 1.75rem;
+}
+
+.section--body {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -16px;
+    margin-bottom: -16px;
+}
+
+.section--body--item {
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+}
+
+.category--item {
+    width: 180px;
+    height: 180px;
+    background-color: rgb(245, 155, 35);
+}
+
+.category--item:before {
+    content: ' ';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(0,212,255,0) 100%);
+    z-index: -1;
+}
+
+.category--item a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.category--item a h3 {
+    margin: 0;
+    padding-top: 16px;
+    padding-left: 16px;
+}
+
+.category--item img {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    bottom: -5px;
+    right: -18px;
+    transform: rotate(25deg);
+    z-index: 0;
+    box-shadow: -1px 3px 2px 0px rgba(0,0,0,0.1);
+}
+
+.section--body--item.section--body--item--lg.category--item {
+    width: 376px; /* (2 * normal section--item width) + 16px [margin-right: 16px] */
+    height: 220px;
+}
+
+.section--body--item.section--body--item--lg.category--item img {
+    width: 130px;
+    height: 130px;
+}
+
+.section--body--item.section--body--item--lg.category--item a h3 {
+    font-size: 2.5rem;
+}
+
+
+/* PART 4 */
+main .section .subtitle {
+    color: #b3b3b3;
+    font-size: 1rem;
+    margin-top: -8px;
+    font-weight: 100;
+}
+
+.section--header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.section--body--item {
+    width: 165px;
+    height: 240px;
+    background-color: rgb(38, 38, 38);
+}
+
+.section--body--item.album--item,
+.section--body--item.artist--item {
+    padding: 20px;
+    cursor: pointer;
+}
+
+.section--body--item .section--body--item--img {
+    width: 125px;
+    height: 125px;
+    margin: 0 auto;
+}
+
+.section--body--item .section--body--item--img img {
+    max-width: 100%;
+    height: auto;
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,.3), 0 1px 2px 0 rgba(0,0,0,.2);
+}
+
+.section--body--item--title {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+    overflow-x: hidden;
+    white-space: nowrap;
+}
+
+.section--body--item--subtitle {
+    margin: 0;
+    margin-top: 1px;
+}
+
+a.section--header--right--more,
+.section--body--item--subtitle,
+.section--body--item--subtitle a {
+    color: #b3b3b3;
+    font-size: 0.8rem;
+    text-decoration: none;
+}
+
+a.section--header--right--more:hover,
+.section--body--item--subtitle a:hover {
+    border-bottom: 1px solid #b3b3b3;
+}
+
+a.section--header--right--more {
+    font-weight: 700;
+    letter-spacing: 1.35px;
+}
+
+/* Add artist circle image */
+.section--body--item.artist--item .section--body--item--img img {
+    border-radius: 50%;
+}
+
+.section--body--item--play {
+    display: none;
+    height: 40px;
+    width: 40px;
+    border-radius: 50%;
+    background: #1db954;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    box-shadow: 0px 0px 8px 8px rgb(37, 37, 37);
+    cursor: default;
+}
+
+.section--body--item--play:hover,
+.section--body--item--play.active {
+    transform: scale(1.05);
+}
+
+.section--body--item:hover .section--body--item--play,
+.section--body--item--play.active {
+    display: flex;
+}
+
+
+/* PART 5 Bottom Bar Left column*/
+
+main {
+    max-height: calc(100vh - 90px); /* 90px is the height of the bottom bar */
+    min-height: calc(100vh - 90px); /* 90px is the height of the bottom bar */
+}
+
+.sidebar {
+    height: calc(100% - 90px); /* 90px is the height of the bottom bar */
+}
+
+.bottom-bar {
+    width: 100%;
+    height: 90px;
+    border-top: 1px solid #000;
+    background-color: rgba(24, 24, 24, 1);
+    z-index: 1;
+    position: absolute;
+    bottom: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+}
+
+.bottom-bar--left-col {
+    display: flex;
+    align-items: center;
+    position: relative;
+    transition: left 300ms;
+    left: 0;
+}
+
+.bottom-bar--left-col.expanded {
+    left: -80px;
+}
+
+.bottom-bar--left-col--song {
+    display: flex;
+}
+
+.bottom-bar--left-col--song--img {
+    margin-right: 14px;
+    display: flex;
+    position: relative;
+}
+
+.bottom-bar--left-col--song--img img {
+    height: 56px;
+    width: 56px;
+    box-shadow: 0 10px 30px 0 rgba(0,0,0,.3), 0 1px 2px 0 rgba(0,0,0,.2);
+}
+
+.bottom-bar--left-col--song--img--pull-up {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: #000;
+    width: 24px;
+    height: 24px;
+    opacity: 0.7;
+    border-radius: 50%;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: #b3b3b3;
+}
+
+.bottom-bar--left-col--song--img--pull-up:hover {
+    opacity: 0.8;
+    transform: scale(1.1);
+    color: #fff;
+}
+
+.bottom-bar--left-col--song--img:hover .bottom-bar--left-col--song--img--pull-up {
+    display: flex;
+}
+
+.bottom-bar--left-col--song--details {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin-right: 14px;
+}
+
+.bottom-bar--left-col--song--details--wrapper {
+    display: block;
+    line-height: 17px;
+}
+
+.bottom-bar--left-col--song--details a {
+    display: inline;
+    text-decoration: none;
+    color: #fff;
+    letter-spacing: 0;
+}
+
+.bottom-bar--left-col--song--details a:hover {
+    color: #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.bottom-bar--left-col--song--details--title {
+    font-size: 0.875rem;
+}
+
+.bottom-bar--left-col--song--details--artist {
+    font-size: 0.75rem;
+}
+
+.bottom-bar--left-col--actions {
+    display: flex;
+    align-items: center;
+}
+
+.bottom-bar--left-col--actions--favorite {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    color: #b3b3b3;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.bottom-bar--left-col--actions--favorite:hover {
+    color: #fff;
+}
+
+.bottom-bar--left-col--actions--pip {
+    background: transparent;
+    border: 0;
+    outline: 0;
+    position: relative;
+    width: 16px;
+    height: 13px;
+    padding: 0;
+}
+
+.pip-icon {
+    border: 1px solid;
+    border-bottom: 2px solid;
+    border-radius: 1px;
+    border-color: #b3b3b3;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.pip-icon:before {
+    content: '';
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    height: 3px;
+    width: 5px;
+    background: #b3b3b3;
+    border-radius: 1px;
+}
+
+.bottom-bar--left-col--actions--pip:hover .pip-icon {
+    border-color: #fff;
+}
+
+.bottom-bar--left-col--actions--pip:hover .pip-icon:before {
+    background: #fff;
+}
