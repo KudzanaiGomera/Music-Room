@@ -20,7 +20,7 @@
       <header class="navbar">
         <div class="navbar-container">
           <div class="logo link center">
-            <img src="images/musicroom.png" alt="company logo" />
+            <img src="{% static 'images/musicroom.png' %}" alt="company logo" />
           </div>
           <div class="navbar-toggle">
             {% if request.user.is_authenticated %}
@@ -52,7 +52,7 @@
         <footer>
             <section class="footer-links-section">
               <div class="logo link">
-                <img src="images/musicroom.png" alt="company logo" />
+                <img src="{% static 'images/musicroom.png' %}" alt="company logo" />
               </div>
               <div class="footer-links">
                 <ul>
@@ -77,16 +77,16 @@
                 </ul>
               </div>
               <div class="footer-social-icons">
-                <img class="link" src="images/instagram.png" alt="instagram link" />
-                <img class="link" src="images/twitter.png" alt="twitter link" />
-                <img class="link" src="images/facebook.png" alt="facebook link" />
+                <img class="link" src="{% static 'images/instagram.png' %}" alt="instagram link" />
+                <img class="link" src="{% static 'images/twitter.png' %}" alt="twitter link" />
+                <img class="link" src="{% static 'images/facebook.png' %}" alt="facebook link" />
               </div>
             </section>
     
             <section class="footer-legal-section">
               <div class="legal-section-country">
                 <p class="link country dark-grey">South Africa</p>
-                <img class="flag" src="images/southafrican.svg" alt="sverige flagga" />
+                <img class="flag" src="{% static 'images/southafrican.svg' %}" alt="sverige flagga" />
               </div>
               <div class="container">
                 <div class="legal-section-links">

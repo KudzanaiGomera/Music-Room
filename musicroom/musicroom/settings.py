@@ -165,7 +165,6 @@ EMAIL_HOST_USER = 'matchamatcha23@gmail.com'
 EMAIL_HOST_PASSWORD = 'Hacker23'
 
 LOGIN_REDIRECT_URL = '/'
-# LOGIN_REDIRECT_URL = 'post_list'
 
 #for google+
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '324378687338-v0skkf89o0ggj8qrribit4ptbvtfei4n.apps.googleusercontent.com'
