@@ -35,4 +35,8 @@ ever, depending on the part you’re interested in, you should also validate tho
 
 ~ python3 manage.py runserver localhost:8000
 
+# Incase you face site not matching ... when resetting password run the following commands
 
+~ python manage.py shell
+~ from django.contrib.sites.models import Site
+~ Site.objects.create(domain='localhost:8000', name='localhost')
