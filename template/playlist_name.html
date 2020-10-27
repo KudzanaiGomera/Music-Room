@@ -1,0 +1,135 @@
+<!doctype html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Playlist Details</title>
+  <meta name="description" content="Hypertube">
+  <script src="{% static 'js/Playlist.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/> 
+</head>
+
+<body>
+  <div class="home">
+    {% include 'navibar.html' %}
+
+    <div id = "myNav" class="overlay">
+      <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</p>
+      <div class="overlay-content">
+        <p><u>User who have access</u></p>
+          <p id ="private_user_list"></p>
+          {% for k in private_list%}
+          <script>
+            var user_list="{{k.playlist_members}}"
+            console.log("User list",user_list)
+            var playlist_owner="{{k.playlist_owner}}"
+            var names= user_list.split(',')
+            names.shift()
+            names.forEach(function(results){
+              var name_div=document.getElementById('private_user_list')
+              var create_div=document.createElement('div')
+              var create_hr = document.createElement('hr')
+              create_hr.setAttribute("width","500px")
+              create_hr.setAttribute("text-align","centre")
+              create_div.innerHTML=results
+              if (playlist_owner == `{{user}}`)
+              {var create_btn = document.createElement('button')
+              create_btn.appendChild(document.createTextNode('remove user'))
+              create_div.appendChild(create_btn)}
+
+              name_div.appendChild(create_hr)
+              name_div.appendChild(create_div)
+              name_div.appendChild(create_hr)
+
+            })
+            // document.getElementById('private_user_list').textContent=names[0]
+          </script>
+          <!-- <p>{{k.playlist_members}}</p> -->
+          {% endfor %}
+        </div>
+      </div>
+    <p>---------------</p>
+    <h1> Playlist : {{playlist_name}} </h1>
+    {% for k in private_list%}
+    <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40">{{k.playlist_status}} : <a href="#" onclick="edit_user();return false  ">List of users</a>
+    {% endfor %}
+    {% for j in public_list%}
+    <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40">{{j.playlist_status}}
+    {% endfor %}
+    <p>Login-in : {{user}}</p>
+    {{ playlist_name |json_script:"playlist-name"}}
+    {{ request.user.username| json_script:"user-username" }}
+  Add songs<input id="songs"><button id="song_button">Add</button><br><br>
+  <pre>   Title   |   Album   |   Date Added   |   Duration   | </pre>
+  <ul id="List_songs"></ul><div id="button_1"></div>
+    <!-- <textarea id="chat-text" cols="40" rows="30"></textarea><br> -->
+    <!-- <input id="input" type="text" size="35"> -->
+    <!-- <input id="submit" type="button" value="Send"> -->
+
+
+
+</div>
+  <script>
+    
+    const playlistName= JSON.parse(document.getElementById('playlist-name').textContent);
+    const user_name= JSON.parse(document.getElementById('user-username').textContent);
+    const playlist_Socket= new WebSocket('ws://'+window.location.host+'/ws/playlist/'+playlistName+'/');
+
+    document.querySelector('#song_button').onclick=function(e)
+    {
+      const messageInputDom =document.querySelector('#songs');
+      const message =messageInputDom.value;
+      playlist_Socket.send(JSON.stringify({
+          'message': message,
+          'user_name': user_name,
+          'delete_song':''
+      }));
+      messageInputDom.value = '';
+    }
+    document.querySelector('#remove_song_id')   
+    playlist_Socket.onmessage =function(e){
+      const data = JSON.parse(e.data);
+      // document.querySelector('#chat-text').value +=(data.user_name +' : '+data.message + '\n')
+      var add_song= document.createElement("li");
+      var remove_song = document.createElement("button");
+      remove_song.appendChild(document.createTextNode('remove'))
+      remove_song.setAttribute('content','test1');
+      var song_input=data.message[0];
+      remove_song.setAttribute('id','remove_song_id');
+      add_song.setAttribute('id',song_input);
+      remove_song.setAttribute("onclick",`delete_song(${song_input})`);
+      remove_song.setAttribute
+      var create_node =document.createTextNode(song_input+' '+'|'+'Album_example'+'|'+' '+'01-01-2020'+'|'+' '+'00:00'+'|      ')
+      add_song.appendChild(create_node);
+      if (song_input !="" && data.delete_song[0] == '')
+        document.getElementById("List_songs").appendChild(add_song).appendChild(remove_song)
+        // document.getElementById("List_songs").appendChild(remove_song)
+      if (data.delete_song[0] != '')
+        {
+          found=document.getElementById(data.delete_song[0][0])
+          found.remove()
+        }
+
+      document.getElementById("songs").value = ""  
+     }
+     function delete_song(song_name)     
+     {
+      
+        const messageInputDom =song_name.id;
+        playlist_Socket.send(JSON.stringify({
+          'message': '',
+          'user_name': '',
+          'delete_song':messageInputDom
+          }));
+          messageInputDom.value = '';
+      
+      // found=document.getElementById(song_name.id)
+      // found.remove()
+     }
+    function edit_user()
+    {
+      openNav()
+    }
+  </script>  
+</body>
+</html>

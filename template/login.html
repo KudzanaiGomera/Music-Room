@@ -1,0 +1,31 @@
+<!doctype html>
+{% load static %}
+{% load socialaccount %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Login page</title>
+  <meta name="description" content="Hypertube">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/> 
+</head>
+
+<body>
+  <div class="login">
+    <h1> Please login </h1>
+    <p>{{ value }}</p>
+    <form action="/" method="POST">{% csrf_token %}
+
+      <p style="color: red">{{message}}</p  >
+      {{form.as_p}}
+      <button type="submit">Login</button>
+    </form>
+    <a href="https://connect.deezer.com/oauth/auth.php?app_id=440262&redirect_uri=http://127.0.0.1:8000/code_check/&perms=basic_access,email,manage_library,delete_library">Login Deezer</a>
+      <br><a href="/register">Create user</a><br>
+      <br><a href="/reset_password">Reset password</a><br>
+    <footer>
+    <p>Hyperlink project 2020</p>
+  </footer>
+</div>
+  <!-- <script src="js/scripts.js"></script> -->
+</body>
+</html>

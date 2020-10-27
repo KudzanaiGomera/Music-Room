@@ -1,0 +1,29 @@
+
+<!doctype html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home page</title>
+    <meta name="description" content="Hypertube">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+  </head>
+  
+  <body>
+    <div class="home">
+
+      {% include 'navibar.html' %}
+      <h>{{datashow}}</h>
+      <p> Welcome {{ user }}</p>
+      {% if user.user_profile.picture %}
+      <img id="profile_pic" src="{{ user.user_profile.picture.url}}" alt="a"width="140" height="140"> <img>
+      {% else %}
+      <img id="profile_pic" src="{% static 'images/default_user.png' %}" alt="default_pic" width="140" height="140">
+      {% endif %}
+      <h1> Hypertube </h1>
+    </div>
+ 
+     
+  <!-- <script src="js/scripts.js"></script> -->
+</body>
+</html>
