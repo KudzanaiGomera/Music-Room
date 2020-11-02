@@ -19,13 +19,14 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
 
-from Pages.views import home_view,login_view,logout_view
+from Pages.views import home_view,login_view,logout_view,search_view
 from Playlist.views import playlist_view,playlist_add,playlist_delete,playlist_edit,code_check,get_host
 urlpatterns = [
     path('', login_view, name='login'),
     path('home/',home_view,name='home'),
     path('code_check/',code_check,name='code_check'),
     path('logout/',logout_view,name='logout'),
+    path('search_view/',search_view,name='search_view'),
     path('playlist_view/',playlist_view,name='playlist_view'),
     path('playlist_add/',playlist_add,name='playlist_add'),
     path('playlist/', include('Playlist.urls')),
