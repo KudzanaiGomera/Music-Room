@@ -1,0 +1,307 @@
+<!doctype html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Home page</title>
+    <meta name="description" content="Hypertube">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <script src="{% static 'js/Playlist.js' %}"></script>
+  </head>
+  
+  <body>
+    <div id = "myNav" class="overlay">
+      <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</p>
+      <div class="overlay-content">
+        <p>Create Playlist:<input type="text" id="playlist_name">
+        Private<input type="checkbox" id="playlist_status" name></p>
+        <div id = "myNav5" class="overlay">
+            <div class="user_details">
+              <h id=message_users></h>
+              <p>Please select users</p>
+              <p id="Add_users"></p>
+            <input id="user_input" type="text" placeholder="Add users..."><button id="add_private_id"onclick="add_private_user()">Add user</button>
+            <script>
+               private_user_array=[`{{user}}`]
+               console.log("Current list",private_user_array)
+               var list_users=get_user_array(JSON.parse('{{ json_user | safe }}'))
+               console.log("database users",list_users)
+               var private_input=document.getElementById('add_private_id')
+               private_input.addEventListener('click' ,function(){
+                var user_exist=list_users.filter(function(results){
+                    if (results == user_input.value)
+                    return results
+                  })
+                  console.log("Found?", user_exist)
+                  if (user_exist.length == 0)
+                    document.getElementById('message_users').innerHTML="User does not exist.Please enter a valid user"
+                  else
+                    document.getElementById('message_users').innerHTML=''
+                 var check_doubles=private_user_array.filter(function(results){
+                 if (user_input.value == results)
+                  return results
+                })
+                if((document.querySelector('.user_list').textContent != "No user found") &&(user_input.value !='') && check_doubles.length==0 && user_exist.length !=0)
+                  {
+                    private_user_array.push(user_input.value)
+                    add_user_p_tag= document.getElementById('Add_users')
+                    add_user=document.createElement('input')
+                    add_label= document.createElement('label')
+                    add_label.innerHTML=user_input.value;
+                    add_user_p_tag.appendChild(add_label)
+                    add_user.setAttribute('type','checkbox')
+                    add_user_p_tag.appendChild(add_user)
+                  }
+                user_input.value=''
+                console.log('Private array: ',private_user_array)
+              })
+            </script>
+              <div class="user_list">
+              </div>
+            </div> 
+          <!-- code here -->
+        </div>
+        <!-- <button id="Create_button" onclick="Create_playlist(private_user_array);closeNav()">Create</button> -->
+        <button id="Create_button">Create</button>
+      </div>
+    </div>
+
+
+    <div class="home">
+      
+      <p>--Playlist--</p>
+      <div id="public_label">
+        {% for k in public_list %}
+        <p id={{k.id}}> 
+          {% if k.playlist_owner == user %}
+            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+            {% endif %}
+            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}--{{k.id}}</a>  <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
+        <!-- <p>{{k.playlist_name}}<button id="Delete_playlist_button" value={{k.id}} onclick="Delete_playlist('{{k.id}}')">Delete</button></p> -->
+        {% endfor %}
+      </div>
+      <div id="private_label">--Private--</div>
+      {% for j in private_list %}
+        <p id={{j.id}}><a href="/playlist/{{j.playlist_name}}"></a>{{j.playlist_name}}--{{j.id}}<button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+      {% endfor %}
+      <p>Current Log-on : {{user}}</p>
+        <!-- Search:<input><br> -->
+        <!-- <button>Search</button> -->
+        <button onclick="openNav()">Create Playlist</button>
+      
+      <p>{{form}}</p>
+      <h>List of Playlist</h>
+     
+
+      <p>------------------------------------</p>
+      <div id="playlist_display">
+        <p>***Public Playlist***</p>
+        {% for k in public_list %}
+          <p>{% if k.playlist_owner == user %}
+            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+            {% endif%}</p>
+            <a href="/playlist/{{k.playlist_name}}">{{ k.playlist_name }}--{{k.id}}</a>
+            {% if k.playlist_owner == user %}
+            <button onclick="Delete_playlist('{{k.id}}')">Delete</button>
+            <button onclick="openNav2()"> Edit</button>
+            {% endif %}
+            <div id = "myNav2" class="overlay">
+              <p href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</p>
+              <div class="overlay-content">
+              <p>Edit playlist <input></p>
+              <button onclick="Edit_playlist('{{k.id}}');closeNav()">Edit</button>
+              </div>
+            </div> 
+        {% endfor %}
+        <p>------------------------------------</p>
+        <p>***Private Playlist***</p>
+        {% for j in private_list %}
+          <p>{% if j.playlist_owner == user %}
+            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+            {% endif%}
+            <a href="/playlist/{{j.playlist_name}}">{{ j.playlist_name }}</a>
+            {% if j.playlist_owner == user %}
+            <button onclick="Delete_playlist('{{j.id}}')">Delete</button>
+            <button onclick="Edit_playlist('{{j.id}}');closeNav2()"> Edit</button>
+          {% endif %}
+        </p>
+        {% endfor %}
+        <p>------------------------------------</p>
+      </div>
+</body>
+<footer>Music Room 2020</footer>
+</html>
+<script>
+  function remove_socket_buttons(tag,value)
+  {
+    Delete_playlist(value)
+    result=document.getElementById(value)
+    tag.remove() 
+  }
+  function create_playlist_web_socket()
+  {
+    
+    const playlist_Socket= new WebSocket("ws://" + window.location.host + "/ws/playlist_view/");
+    console.log("This is the socket: ",window.location.host)
+    playlist_input =document.getElementById('playlist_name')
+    public_label=document.getElementById('public_label')
+    document.getElementById('Create_button').addEventListener('click', function(){
+      let hold= Create_playlist(private_user_array)
+      closeNav()
+      hold.then(function(results){
+        console.log(results)
+        check_1 = document.getElementById('playlist_status').checked
+        if (check_1 ==false)
+            status='public'
+        else
+          status='private'
+        playlist_Socket.send(JSON.stringify({
+          'playlist_name':playlist_input.value,
+          'status':status,
+          'playlist_pk':results,
+          'delete_playlist':''}))
+        })
+    })
+   delete_buttons=document.querySelectorAll('[name="Delete_playlist_button"]')
+   delete_buttons.forEach(function(results){
+     results.addEventListener('click',function(k)
+     {
+        playlist_Socket.send(JSON.stringify({
+          'playlist_name':'None',
+          'status':status,
+          'delete_playlist':results.id,
+          'playlist_pk':'None'}))
+     })}
+     );
+     playlist_Socket.onmessage=function(e){
+       const data=JSON.parse(e.data)
+       delete_flag= data['delete_playlist'][0]
+       if(delete_flag !='')
+       {
+         delete_p=document.getElementById(data['delete_playlist'][0])
+         delete_p.remove()
+         Delete_playlist(data['delete_playlist'][0])
+        }
+        else{ 
+          create_playlist_tag=document.createElement("p")
+          create_playlist_tag.setAttribute('id' ,data['playlist_name'][0])
+          playlist_remove_buttton=document.createElement("button")
+          playlist_remove_buttton.appendChild(document.createTextNode('Delete'))
+          playlist_remove_buttton.setAttribute('name','Delete_playlist_button')
+          playlist_remove_buttton.setAttribute('id',data['playlist_name'][0])
+          playlist_remove_buttton.setAttribute('onclick', `remove_socket_buttons(${data['playlist_name'][0]}, ${data['playlist_pk'][0]})`)
+          create_playlist_tag.innerHTML= '<a href="/playlist/'+data['playlist_name'][0]+'">'+data['playlist_name'][0]+'</a>';
+          if (data['status'][0] == 'public')
+            public_label.appendChild(create_playlist_tag)
+          else
+            private_label.appendChild(create_playlist_tag)
+
+
+
+
+
+          let get_owner_value=get_owner(data['playlist_pk'][0])
+          get_owner_value.then(function(results){
+            console.log("The owner is_x: ", results)
+            console.log("Current log-in",`{{user}}`)
+            if (`{{user}}` == results)
+            {
+            console.log("Match")
+            create_playlist_tag.appendChild(playlist_remove_buttton)
+          }})
+        }
+      } 
+  }
+  
+  function current_checker()
+  {
+    var check_1=document.getElementById('playlist_status')
+    check_1.addEventListener('click', function(){
+      if (check_1.checked == true){
+        openNav3()}
+      else{
+        closeNav3()}})
+  }
+function Delete_playlist(button_id)
+{
+  $.ajax({
+    url:'/playlist_delete/',
+    method:"POST",
+    data:{
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+      button_id,
+    }
+});
+$("#playlist_display").load(window.location.href + " #playlist_display" )
+}
+
+function get_owner(id)
+{
+  return new Promise((resolve,reject)=>{
+    $.ajax({
+   url:'/get_host/',
+   method:'POST',
+   data:{
+     csrfmiddlewaretoken: "{{ csrf_token }}",
+     id
+   },
+   success:(data)=>{
+     resolve(data)
+   },
+   error:(response)=>{
+     reject(response)
+   }})
+  }) 
+}
+function Edit_playlist(button_id)
+{
+  $.ajax({
+    url:'/playlist_edit/',
+    method:"POST",
+    data:{
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+      button_id,
+    }
+});
+$("#playlist_display").load(window.location.href + " #playlist_display" )
+
+}
+async function Create_playlist(value)
+{
+  var user_string =value.toString()
+  console.log("Create playlist",user_string)
+  var s2=user_string.split(',')
+  check_1 = document.getElementById('playlist_status').checked
+  play_name=document.getElementById('playlist_name').value
+  return new Promise((resolve,reject)=>{
+    $.ajax({
+    url:'/playlist_add/',
+    method:"POST",
+    data:{
+      csrfmiddlewaretoken: "{{ csrf_token }}",
+      play_name,
+      check_1,
+      user_string
+    },
+    success:(data)=>{
+      resolve(data);
+    },
+    error:(response)=>
+    {
+      reject(response);
+    }
+  })
+    // document.getElementById('playlist_status').checked=false
+  }
+  )
+  // $("#playlist_display").load(window.location.href + " #playlist_display" )
+}
+var user_name=JSON.parse('{{ json_user | safe }}')
+// console.log(user_name[1].fields.username)
+current_checker()
+get_user(user_name)
+create_playlist_web_socket()
+
+// get_user()
+</script>

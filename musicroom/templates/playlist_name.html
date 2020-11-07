@@ -1,0 +1,278 @@
+<!doctype html>
+{% load static %}
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Playlist Details</title>
+  <meta name="description" content="Hypertube">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="{% static 'js/Playlist.js' %}"></script>
+  <!-- deezer player -->
+  <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script> -->
+  <!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/jquery-ui.min.js"></script> -->
+  <!-- <script type="text/javascript" src="http://cdn-files.deezer.com/js/min/dz-v00202681.js"></script> -->
+  <style type="text/css">
+    /* .progressbarplay { */
+      /* cursor:pointer;overflow: hidden;height: 8px;margin-bottom: 8px;background-color: #F7F7F7; */
+      /* background-image: -moz-linear-gradient(top,whiteSmoke,#F9F9F9);background-image: -ms-linear-gradient(top,whiteSmoke,#F9F9F9); */
+      /* background-image: -webkit-gradient(linear,0 0,0 100%,from(whiteSmoke),to(#F9F9F9)); */
+      /* background-image: -webkit-linear-gradient(top,whiteSmoke,#F9F9F9); */
+      /* background-image: -o-linear-gradient(top,whiteSmoke,#F9F9F9); */
+      /* background-image: linear-gradient(top,whiteSmoke,#F9F9F9); */
+      /* background-repeat: repeat-x; */
+      /* filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f5f5f5',endColorstr='#f9f9f9',GradientType=0); */
+      /* -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); */
+      /* -moz-box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); */
+      /* box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1); */
+      /* -webkit-border-radius: 6px;-moz-border-radius: 6px;border-radius: 6px; */
+    /* } */
+    /* .progressbarplay .bar { */
+      /* cursor:pointer; */
+      /* background: #4496C6; */
+      /* width: 0;height: 8px;color: white;font-size: 12px; */
+      /* text-align: center;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25); */
+      /* -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15); */
+      /* -moz-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15); */
+      /* box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15); */
+      /* -webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box; */
+      /* -webkit-transition: width .6s ease;-moz-transition: width .6s ease; */
+      /* -ms-transition: width .6s ease;-o-transition: width .6s ease;transition: width .6s ease; */
+    /* } */
+  </style>
+
+  <!-- deezer player -->
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/> 
+</head>
+
+<body>
+  <div class="home"> 
+
+    <div id = "myNav2" class="overlay">
+      <p href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</p>
+      <div class="overlay-content">
+        <p> Add tracks to playlist</p>
+        <form method="POST" >{% csrf_token %}
+          <p>Search music<input id="search_artist" name="search_artist" type="text" placeholder="Enter artist/track.."></p>
+          <button id="artist_enter" onclick="openNav2()">Enter</button>
+          <button id="clear_search_results" name="clear_search_results">Exit</button>
+        </form>
+        <div id="artist_info">
+        {% for k in artist_value%}
+          <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p>
+          <!-- <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}  |  {{k.artist_name}}|{{k.album_title}}   | {{k.duration}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p> -->
+          <hr></hr>
+          {% endfor %}
+        </div> 
+      </div>
+    </div>
+    {% if artist_value %}
+    <script>
+     openNav2()
+    </script>
+    {% endif %}
+    <div id = "myNav" class="overlay">
+      <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</p>
+      <div class="overlay-content">
+        <p><u>User who have access</u></p>
+          <p id ="private_user_list"></p>
+          {% for k in private_list%}
+          <script>
+            var user_list="{{k.playlist_members}}"
+            console.log("User list",user_list)
+            var playlist_owner="{{k.playlist_owner}}"
+            var names= user_list.split(',')
+            names.shift()
+            names.forEach(function(results){
+              var name_div=document.getElementById('private_user_list')
+              var create_div=document.createElement('div')
+              var create_hr = document.createElement('hr')
+              create_hr.setAttribute("width","500px")
+              create_hr.setAttribute("text-align","centre")
+              create_div.innerHTML=results
+              if (playlist_owner == `{{user}}`)
+              {var create_btn = document.createElement('button')
+              create_btn.appendChild(document.createTextNode('remove user'))
+              create_div.appendChild(create_btn)}
+
+              name_div.appendChild(create_hr)
+              name_div.appendChild(create_div)
+              name_div.appendChild(create_hr)
+
+            })
+            // document.getElementById('private_user_list').textContent=names[0]
+          </script>
+          <!-- <p>{{k.playlist_members}}</p> -->
+          {% endfor %}
+        </div>
+      </div>
+    <p>---------------</p>
+    <h1> Playlist : {{playlist_name}} </h1>
+    {% for k in private_list%}
+    <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40">{{k.playlist_status}} : <a href="#" onclick="edit_user();return false  ">List of users</a>
+    {% endfor %}
+    {% for j in public_list%}
+    <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40">{{j.playlist_status}}
+    {% endfor %}
+    <p>Login-in : {{user}}</p>
+    {{ playlist_name |json_script:"playlist-name"}}
+    {{ request.user.username| json_script:"user-username" }}
+<button id="Search_results" onclick="openNav2()"> Add tracks to Playlist</button>
+<!-- deezer player -->
+<!-- <div id="dz-root"></div> -->
+<!-- <div id="player" style="width:100%;" align="center"></div> -->
+<!-- <br/> -->
+<!-- <div id="controlers"> -->
+<!--   -->
+	<!-- <input type="button" onclick="DZ.player.playAlbum(302127); return false;" value="Play Daft Punk - Discovery"/> -->
+    <!-- <input type="button" onclick="DZ.player.playAlbum(301775); return false;" value="Play Daft Punk - Homework"/> -->
+    <!-- <input type="button" onclick="DZ.player.playPlaylist(8233653562); return false;" value="Play My playlist"/> -->
+<!--  -->
+	<!-- <br/> -->
+	<!-- <input type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
+	<!-- <input type="button" onclick="DZ.player.playSmartRadio(13); return false;" value="Play Smart Radio"/> -->
+<!-- 	 -->
+	<!-- <br/> -->
+	<!-- <input type="button" onclick="DZ.player.play(); return false;" value="play"/> -->
+	<!-- <input type="button" onclick="DZ.player.pause(); return false;" value="pause"/> -->
+	<!-- <input type="button" onclick="DZ.player.prev(); return false;" value="prev"/> -->
+	<!-- <input type="button" onclick="DZ.player.next(); return false;" value="next"/> -->
+	<!-- <br/> -->
+	<!-- <input type="button" onclick="DZ.player.setVolume(20); return false;" value="set Volume 20"/> -->
+	<!-- <input type="button" onclick="DZ.player.setVolume(80); return false;" value="set Volume 80"/> -->
+<!-- 	 -->
+	<!-- <br/><br/><br/> -->
+<!-- </div> -->
+<!--  -->
+
+
+
+
+
+
+
+
+
+<!-- deezer player -->
+
+  <pre>   Title   |   Album   |   Artist   |   Duration   | </pre>
+  <ul id="List_songs"></ul><div id="button_1"></div>
+    <!-- <textarea id="chat-text" cols="40" rows="30"></textarea><br> -->
+    <!-- <input id="input" type="text" size="35"> -->
+    <!-- <input id="submit" type="button" value="Send"> -->
+
+
+
+</div>
+  <script>
+    
+    const playlistName= JSON.parse(document.getElementById('playlist-name').textContent);
+    const user_name= JSON.parse(document.getElementById('user-username').textContent);
+    const playlist_Socket= new WebSocket('ws://'+window.location.host+'/ws/playlist/'+playlistName+'/');
+
+    get_tracks=document.querySelectorAll('[id=artist_search_add]')
+    get_tracks.forEach(function(results){
+      results.addEventListener('click',function(k)
+      { 
+        // tag_values = results.value.split(',')
+        playlist_Socket.send(JSON.stringify({
+          'message':results.value,
+          'user_name': user_name,
+          'delete_song':''}));
+      })})
+    // document.querySelector('#artist_search_add').onclick=function(e)
+    // {
+      // console.log('')
+      // const messageInputDom =document.querySelector('[name="artist_details"]');
+      // console.log(messageInputDom.id)
+      // const message =messageInputDom.id;
+      // playlist_Socket.send(JSON.stringify({
+          // 'message': message,
+          // 'user_name': user_name,
+          // 'delete_song':''
+      // }));
+      // messageInputDom.value = '';
+    // }
+    document.querySelector('#remove_song_id')   
+    playlist_Socket.onmessage =function(e){
+      const data = JSON.parse(e.data);
+      // document.querySelector('#chat-text').value +=(data.user_name +' : '+data.message + '\n')
+      var add_song= document.createElement("li");
+      var remove_song = document.createElement("button");
+      remove_song.appendChild(document.createTextNode('remove'))
+      remove_song.setAttribute('content','test1');
+      var song_input=data.message[0];
+      console.log("Song_input",song_input)
+      remove_song.setAttribute('id','remove_song_id');
+      add_song.setAttribute('id',song_input);
+      remove_song.setAttribute("onclick",`delete_song(${song_input})`);
+      remove_song.setAttribute
+      var create_node =document.createTextNode(song_input+' '+'|')
+      add_song.appendChild(create_node);
+      if (song_input !="" && data.delete_song[0] == '')
+        document.getElementById("List_songs").appendChild(add_song).appendChild(remove_song)
+        // document.getElementById("List_songs").appendChild(remove_song)
+      if (data.delete_song[0] != '')
+        {
+          get_websocket_id_tag=document.getElementById(data.delete_song)
+          // console.log(get_websocket_id_tag.id)
+          found=document.getElementById(data.delete_song[0][0])
+          found.remove()
+        }
+
+      // document.getElementById("songs").value = ""  
+     }
+     function get_songs()
+     {
+      search_artist=document.getElementById('search_artist').value
+    // console.log()
+    
+     $.ajax({
+       url:'/playlist_name/',
+       method:"POST",
+       data:{
+         csrfmiddlewaretoken: "{{ csrf_token }}",
+         search_artist,}
+        });
+      }
+     function delete_song(song_name)     
+     {
+      
+        const messageInputDom =song_name.id;
+        playlist_Socket.send(JSON.stringify({
+          'message': '',
+          'user_name': '',
+          'delete_song':messageInputDom
+          }));
+          messageInputDom.value = '';
+     }
+    function add_track_playlist(track_id)
+    {
+      playlist_code = `{{playlist_id}}`
+      $.ajax({
+        url:'/api_add_song/',
+        method:"POST",
+        data:{
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          track_id,
+          playlist_code,}});
+        }
+
+
+    function delete_track(track_id)
+    {
+      playlist_code = `{{playlist_id}}`
+      $.ajax({
+        url:'/api_delete_song/',
+        method:"POST",
+        data:{
+          csrfmiddlewaretoken: "{{ csrf_token }}",
+          track_id,
+          playlist_code,}});
+    }
+    // function edit_user()
+    // {
+      // openNav()
+    // }
+  </script>  
+</body>
+</html>

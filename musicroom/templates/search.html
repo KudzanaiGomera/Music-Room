@@ -1,0 +1,45 @@
+<!doctype html>
+{% load static %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Search page</title>
+    <meta name="description" content="Hypertube">
+    <script src="{% static 'js/Playlist.js' %}"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+  </head>
+  
+  <body>
+    <div class="home">
+      <h1> Search</h1>     
+      <form method="POST" >{% csrf_token %}
+        Search music<input id="search_artist" name="search_artist" type="text" placeholder="Enter artist/track.."><button id="artist_enter">Enter</button>
+      </form>
+      <button id="artist_clear">Clear</button>
+    <p> Title| Artist | Duration </p>
+    {% for k in artist_value%}
+    <div id="artist_info">
+      <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" onclick="openNav()">+</button></p>
+    </div>
+    
+    <hr></hr>
+    {% endfor %}
+    <div id = "myNav" class="overlay">
+      <p>Please select playlist</p>
+      <p>temp playlist <button onclick="closeNav()">Add</button> <p>
+    </div>
+    <!-- <p div="results"></p> -->
+    </div>
+ 
+     
+  <script>
+      // get_input=document.getElementById('search_artist')
+      // get_button=document.getElementById('artist_enter')
+      // get_results=document.getElementById('results')
+      // get_button.addEventListener('click', function(){
+          // console.log(get_input.value)
+          // get_results.document.innerHTML=
+      // })
+  </script>
+</body>
+</html>

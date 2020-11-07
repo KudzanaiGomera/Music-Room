@@ -4,11 +4,22 @@ from django.conf import settings
 from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
-from . import views
+from . import views 
+from Playlist.views import code_check, playlist_view,playlist_add,playlist_delete,api_add_song,api_delete_song
 
 
 urlpatterns = [
     path('', views.index, name='index'),
+    # Playlist code start
+    path('code_check/', code_check,name='code_check'),
+    path('playlist_view/', playlist_view,name='playlist_view'),
+    path('playlist/', include('Playlist.urls')),
+    path('playlist_add/',playlist_add,name='playlist_add'),
+    path('playlist_delete/',playlist_delete,name='playlist_delete'),
+    path('api_add_song/',api_add_song,name='api_add_song'),
+    path('api_delete_song/',api_delete_song,name='api_delete_song'),
+    
+    # Playlist code end
     path('login.html', views.login2, name='login2'),
     path('register.html', views.register, name='register'),
     path('logoutUser', views.logoutUser, name='logoutUser'),

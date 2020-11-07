@@ -46,6 +46,8 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'Playlist',
+    'channels'
 ]
 
 #social_app/settings.py
@@ -89,6 +91,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'musicroom.wsgi.application'
+ASGI_APPLICATION = 'musicroom.routing.application'
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND":"channels.layers.InMemoryChannelLayer"
+    }
+}
 
 
 # Database
