@@ -68,6 +68,10 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message'],
+        track_id = text_data_json['track_id'],
+        artist_name = text_data_json['artist_name'],
+        album_title = text_data_json['album_title'],
+        duration = text_data_json['duration'],
         user_name = text_data_json['user_name'],
         delete_song = text_data_json['delete_song'],
 
@@ -76,18 +80,29 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
             {
                 'type':'playlist_build',
                 'message': message,
+                'track_id':track_id,
+                'artist_name':artist_name,
+                'album_title':album_title,
+                'duration':duration,
                 'user_name':user_name,
                 'delete_song':delete_song,
             }
         )
     async def playlist_build(self,event):
         message= event['message'],
+        track_id=event['track_id'],
+        artist_name=event['artist_name']
+        album_title=event['album_title'],
+        duration=event['duration'],
         user_name= event['user_name'],
-        delete_song= event['delete_song'],
-        
+        delete_song= event['delete_song'], 
 
         await self.send(text_data=json.dumps({
             'message':message,
+            'track_id':track_id,
+            'artist_name':artist_name,
+            'album_title':album_title,
+            'duration':duration,
             'user_name': user_name,
             'delete_song':delete_song,
         }))

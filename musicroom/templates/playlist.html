@@ -83,7 +83,11 @@
       </div>
       <div id="private_label">--Private--</div>
       {% for j in private_list %}
-        <p id={{j.id}}><a href="/playlist/{{j.playlist_name}}"></a>{{j.playlist_name}}--{{j.id}}<button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+      <p id={{j.id}}>
+        {% if j.playlist_owner == user %}
+          <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+        {% endif %}
+          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}--{{j.id}}</a><button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
       {% endfor %}
       <p>Current Log-on : {{user}}</p>
         <!-- Search:<input><br> -->
@@ -92,43 +96,6 @@
       
       <p>{{form}}</p>
       <h>List of Playlist</h>
-     
-
-      <p>------------------------------------</p>
-      <div id="playlist_display">
-        <p>***Public Playlist***</p>
-        {% for k in public_list %}
-          <p>{% if k.playlist_owner == user %}
-            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
-            {% endif%}</p>
-            <a href="/playlist/{{k.playlist_name}}">{{ k.playlist_name }}--{{k.id}}</a>
-            {% if k.playlist_owner == user %}
-            <button onclick="Delete_playlist('{{k.id}}')">Delete</button>
-            <button onclick="openNav2()"> Edit</button>
-            {% endif %}
-            <div id = "myNav2" class="overlay">
-              <p href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</p>
-              <div class="overlay-content">
-              <p>Edit playlist <input></p>
-              <button onclick="Edit_playlist('{{k.id}}');closeNav()">Edit</button>
-              </div>
-            </div> 
-        {% endfor %}
-        <p>------------------------------------</p>
-        <p>***Private Playlist***</p>
-        {% for j in private_list %}
-          <p>{% if j.playlist_owner == user %}
-            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
-            {% endif%}
-            <a href="/playlist/{{j.playlist_name}}">{{ j.playlist_name }}</a>
-            {% if j.playlist_owner == user %}
-            <button onclick="Delete_playlist('{{j.id}}')">Delete</button>
-            <button onclick="Edit_playlist('{{j.id}}');closeNav2()"> Edit</button>
-          {% endif %}
-        </p>
-        {% endfor %}
-        <p>------------------------------------</p>
-      </div>
 </body>
 <footer>Music Room 2020</footer>
 </html>

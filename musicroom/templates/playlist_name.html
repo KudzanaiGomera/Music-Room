@@ -45,24 +45,27 @@
 </head>
 
 <body>
-  <div class="home"> 
-
+  <div class="home">
     <div id = "myNav2" class="overlay">
-      <p href="javascript:void(0)" class="closebtn" onclick="closeNav2()">&times;</p>
+      <p href="javascript:void(0)" class="closebtn" onclick="closeNav2();close_search()">&times;</p>
       <div class="overlay-content">
         <p> Add tracks to playlist</p>
         <form method="POST" >{% csrf_token %}
           <p>Search music<input id="search_artist" name="search_artist" type="text" placeholder="Enter artist/track.."></p>
           <button id="artist_enter" onclick="openNav2()">Enter</button>
-          <button id="clear_search_results" name="clear_search_results">Exit</button>
+          <button id="clear_search_results" name="clear_search_results">Clear search</button>
         </form>
-        <div id="artist_info">
-        {% for k in artist_value%}
-          <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p>
-          <!-- <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}  |  {{k.artist_name}}|{{k.album_title}}   | {{k.duration}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p> -->
-          <hr></hr>
-          {% endfor %}
-        </div> 
+        <br>
+        {% if artist_value%}
+          <div id="artist_info">
+          {% for k in artist_value%}
+            <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.artist_id}},{{k.title}},{{k.artist_name}},{{k.album_title}},{{k.duration}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p>
+            <!-- <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}  |  {{k.artist_name}}|{{k.album_title}}   | {{k.duration}}" onclick="add_track_playlist(`{{k.artist_id}}`)">+</button></p> -->
+            <hr></hr>
+            {% endfor %}
+            <button>More</button>
+          </div> 
+        {% endif %}
       </div>
     </div>
     {% if artist_value %}
@@ -75,25 +78,25 @@
       <div class="overlay-content">
         <p><u>User who have access</u></p>
           <p id ="private_user_list"></p>
-          {% for k in private_list%}
+            {% for k in private_list%}
           <script>
             var user_list="{{k.playlist_members}}"
-            console.log("User list",user_list)
+            // console.log("User list",user_list)
             var playlist_owner="{{k.playlist_owner}}"
             var names= user_list.split(',')
-            names.shift()
+            // names.shift()
             names.forEach(function(results){
               var name_div=document.getElementById('private_user_list')
               var create_div=document.createElement('div')
               var create_hr = document.createElement('hr')
               create_hr.setAttribute("width","500px")
               create_hr.setAttribute("text-align","centre")
+              console.log(results)
               create_div.innerHTML=results
-              if (playlist_owner == `{{user}}`)
+              if (results != playlist_owner)
               {var create_btn = document.createElement('button')
               create_btn.appendChild(document.createTextNode('remove user'))
               create_div.appendChild(create_btn)}
-
               name_div.appendChild(create_hr)
               name_div.appendChild(create_div)
               name_div.appendChild(create_hr)
@@ -105,18 +108,28 @@
           {% endfor %}
         </div>
       </div>
-    <p>---------------</p>
-    <h1> Playlist : {{playlist_name}} </h1>
+
+      <a href="/playlist_view">Back to Playlist</a>
+      <a href="/music.html">Home</a>
+    <h1>
+    {% if user.pk == playlist_host %}
+    <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]  
+    {% endif %}
+    Playlist : {{playlist_name}}
+    </h1>
     {% for k in private_list%}
-    <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40">{{k.playlist_status}} : <a href="#" onclick="edit_user();return false  ">List of users</a>
+      <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40">{{k.playlist_status}} : 
+      <a href="#" onclick="edit_user();return false  ">List of users</a>
     {% endfor %}
     {% for j in public_list%}
-    <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40">{{j.playlist_status}}
+      <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40">{{j.playlist_status}}
     {% endfor %}
     <p>Login-in : {{user}}</p>
     {{ playlist_name |json_script:"playlist-name"}}
     {{ request.user.username| json_script:"user-username" }}
-<button id="Search_results" onclick="openNav2()"> Add tracks to Playlist</button>
+  {% if playlist_status == 'Private' or user.pk == playlist_host %}
+    <button id="Search_results" onclick="openNav2()"> Add tracks to Playlist</button>
+  {% endif %}
 <!-- deezer player -->
 <!-- <div id="dz-root"></div> -->
 <!-- <div id="player" style="width:100%;" align="center"></div> -->
@@ -143,25 +156,32 @@
 	<!-- <br/><br/><br/> -->
 <!-- </div> -->
 <!--  -->
-
-
-
-
-
-
-
-
-
 <!-- deezer player -->
 
   <pre>   Title   |   Album   |   Artist   |   Duration   | </pre>
-  <ul id="List_songs"></ul><div id="button_1"></div>
-    <!-- <textarea id="chat-text" cols="40" rows="30"></textarea><br> -->
-    <!-- <input id="input" type="text" size="35"> -->
-    <!-- <input id="submit" type="button" value="Send"> -->
+  
+  
+  
+  
+  <ul id="List_songs">
+    {%for k in current_playlist%}
+    <li id={{k.artist_id}}>{{k.title}}  | {{k.album_title}} | {{k.artist_name}}| {{k.duration}}|
+      {% if playlist_status == 'Private' %}
+        <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
+      {% else %}
+        {% if user.pk == playlist_host%}
+          <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
+        {% endif%}
+      {% endif%}
+      <!-- <p>{{playlist_status}}</p> -->
+    <!-- </p>{{playlist_host}}</p> -->
+    <!-- <p> 1= james 2=nkosi</p> -->
+    <!-- {{praylist_members}} -->
 
-
-
+    {% endfor %}
+  </ul><div id="button_1"></div>
+ 
+ 
 </div>
   <script>
     
@@ -169,63 +189,45 @@
     const user_name= JSON.parse(document.getElementById('user-username').textContent);
     const playlist_Socket= new WebSocket('ws://'+window.location.host+'/ws/playlist/'+playlistName+'/');
 
-    get_tracks=document.querySelectorAll('[id=artist_search_add]')
+    get_tracks=document.querySelectorAll('[id=artist_search_add]');
     get_tracks.forEach(function(results){
-      results.addEventListener('click',function(k)
-      { 
-        // tag_values = results.value.split(',')
-        playlist_Socket.send(JSON.stringify({
-          'message':results.value,
-          'user_name': user_name,
-          'delete_song':''}));
-      })})
-    // document.querySelector('#artist_search_add').onclick=function(e)
-    // {
-      // console.log('')
-      // const messageInputDom =document.querySelector('[name="artist_details"]');
-      // console.log(messageInputDom.id)
-      // const message =messageInputDom.id;
-      // playlist_Socket.send(JSON.stringify({
-          // 'message': message,
-          // 'user_name': user_name,
-          // 'delete_song':''
-      // }));
-      // messageInputDom.value = '';
-    // }
+    results.addEventListener('click',function(k)
+    { 
+      tag_values = results.value.split(',');
+      playlist_Socket.send(JSON.stringify({
+        'message':tag_values[1],
+        'track_id':tag_values[0],
+        'artist_name':tag_values[2],
+        'album_title':tag_values[3],
+        'duration':tag_values[4],
+        'user_name': user_name,
+        'delete_song':''}));
+    })})
     document.querySelector('#remove_song_id')   
     playlist_Socket.onmessage =function(e){
       const data = JSON.parse(e.data);
-      // document.querySelector('#chat-text').value +=(data.user_name +' : '+data.message + '\n')
       var add_song= document.createElement("li");
       var remove_song = document.createElement("button");
-      remove_song.appendChild(document.createTextNode('remove'))
+      remove_song.appendChild(document.createTextNode('remove'));
       remove_song.setAttribute('content','test1');
       var song_input=data.message[0];
-      console.log("Song_input",song_input)
       remove_song.setAttribute('id','remove_song_id');
-      add_song.setAttribute('id',song_input);
-      remove_song.setAttribute("onclick",`delete_song(${song_input})`);
-      remove_song.setAttribute
-      var create_node =document.createTextNode(song_input+' '+'|')
+      add_song.setAttribute('id',data.track_id[0]);
+      remove_song.setAttribute("onclick","delete_song('"+data.track_id[0]+"');delete_track_playlist("+data.track_id[0]+")");
+      var create_node =document.createTextNode(song_input+' '+' | '+data.album_title[0]+'|'+data.artist_name[0]+'|'+data.duration[0]+'|');
       add_song.appendChild(create_node);
       if (song_input !="" && data.delete_song[0] == '')
-        document.getElementById("List_songs").appendChild(add_song).appendChild(remove_song)
-        // document.getElementById("List_songs").appendChild(remove_song)
+        var x=document.getElementById("List_songs").appendChild(add_song);
+      console.log('delete output: ',data.delete_song[0][0]);
       if (data.delete_song[0] != '')
         {
-          get_websocket_id_tag=document.getElementById(data.delete_song)
-          // console.log(get_websocket_id_tag.id)
-          found=document.getElementById(data.delete_song[0][0])
-          found.remove()
-        }
-
-      // document.getElementById("songs").value = ""  
+          found=document.getElementById(data.delete_song[0][0]);
+            found.remove();
+        } 
      }
      function get_songs()
      {
-      search_artist=document.getElementById('search_artist').value
-    // console.log()
-    
+      search_artist=document.getElementById('search_artist').value;
      $.ajax({
        url:'/playlist_name/',
        method:"POST",
@@ -236,18 +238,21 @@
       }
      function delete_song(song_name)     
      {
-      
-        const messageInputDom =song_name.id;
+        const messageInputDom =song_name;
+        console.log('delete input: ',messageInputDom)
         playlist_Socket.send(JSON.stringify({
           'message': '',
+          'track_id':'',
+          'artist_name':'',
+          'album_title':'',
+          'duration':'',
           'user_name': '',
-          'delete_song':messageInputDom
+          'delete_song':messageInputDom,
           }));
-          messageInputDom.value = '';
      }
     function add_track_playlist(track_id)
     {
-      playlist_code = `{{playlist_id}}`
+      playlist_code = `{{playlist_id}}`;
       $.ajax({
         url:'/api_add_song/',
         method:"POST",
@@ -256,11 +261,12 @@
           track_id,
           playlist_code,}});
         }
-
-
-    function delete_track(track_id)
+    function close_search(){
+      document.getElementById("clear_search_results").click();
+    }
+    function delete_track_playlist(track_id)
     {
-      playlist_code = `{{playlist_id}}`
+      playlist_code = `{{playlist_id}}`;
       $.ajax({
         url:'/api_delete_song/',
         method:"POST",
@@ -269,10 +275,10 @@
           track_id,
           playlist_code,}});
     }
-    // function edit_user()
-    // {
-      // openNav()
-    // }
+    function edit_user()
+{
+  openNav()
+}
   </script>  
 </body>
 </html>

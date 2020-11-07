@@ -58,6 +58,7 @@ def playlist_view(request):#Playlist view template
        "json_user":json_user,
     }
     # list_playlist(request)
+    
     return render(request,"playlist.html",context)
 def get_host(request): #playlist
     get_host= Playlist.objects.filter(id=request.POST['id'])
@@ -67,35 +68,49 @@ def get_host(request): #playlist
 
 def playlist_name(request,playlist_name):#Get playlist name + search_results
     artist_value = []
+    fetch_playlist_track_api=[]
     if request.method == 'POST' and request.POST['search_artist']:
         name = request.POST['search_artist']
-        print(name)
-        # search_url = 'https://api.deezer.com/search?q=' + str(name)+'&limit=10'
+        print("Searching for user :",name)
         search_url2 = 'https://api.deezer.com/search/track?q=' + str(name)+'&limit=10'
         json_response = requests.get(search_url2).json()
-        # json_response2 = requests.get(search_url2).json()
-        # info2=json_response2['data']
-        # for k in info2:
-            # time_value2 =datetime.timedelta(seconds=k['duration'])
-            # print("id:",k['id'],"album name : ",k['album']['title'], "duration:",time_value2,'preview_link:',k['preview'],'album_art:',k['album']['cover_medium'] )
         info = json_response['data']
         for k in info:
             time_value =datetime.timedelta(seconds=k['duration'])
             value={'artist_id': k['id'],'artist_name':k['artist']['name'],'title': k['title'],'preview_link':k['preview'],'album_art':k['album']['cover_medium'], 'duration':time_value,'album_title':k['album']['title']}
             artist_value.append(value)
 
+
     private_list = Playlist.objects.filter(playlist_status='Private').filter(playlist_name=playlist_name)
     public_list = Playlist.objects.filter(playlist_status='Public').filter(playlist_name=playlist_name)
     get_pk = Playlist.objects.filter(playlist_name=playlist_name).values('playlist_id')
-    for k in get_pk:
-        playlist_id = k['playlist_id']
+    for j in get_pk:
+        playlist_id = j['playlist_id']
+    get_host = Playlist.objects.filter(playlist_id=playlist_id).values('playlist_owner')#get host of playlist
+    for m in get_host:
+        playlist_host=m['playlist_owner']
+    get_status= Playlist.objects.filter(playlist_id=playlist_id).values('playlist_status')#get playlist private or public status
+    for q in get_status:
+        playlist_status=q['playlist_status']
+
+    # fetch songs from playlist  when  pages refresh from API
+    songs_on_playlist_api= 'https://api.deezer.com/playlist/'+str(playlist_id)+'/tracks'+'&access_token='+request.session.get('access_token')
+    json_response = requests.get(songs_on_playlist_api).json()
+    info2 = json_response['data']
+    for k in info2:
+        time_value =datetime.timedelta(seconds=k['duration'])
+        value= { 'artist_id':k['id'] ,'title':k['title'] ,'album_title':k['album']['title'],'artist_name':k['artist']['name'],'duration':time_value,'preview_link':k['preview'],'album_art':k['album']['cover_medium']}
+        fetch_playlist_track_api.append(value)
+    current_playlist=fetch_playlist_track_api
     context={
         "playlist_name":playlist_name,
         "private_list":private_list,
         "public_list":public_list,
         "artist_value":artist_value,
         "playlist_id":playlist_id,
-
+        "current_playlist":current_playlist,
+        "playlist_host":playlist_host,
+        "playlist_status":playlist_status,
     }
     return(render(request,"playlist_name.html",context))
 
@@ -140,19 +155,19 @@ def api_delete_playlist(request,code):#API request to delete song from playlist
     results=requests.delete('https://api.deezer.com/playlist/'+str(code)+'&access_token='+request.session.get('access_token'))
     print("delete_response",results.text)
 
-def api_delete_song(request,playlist_code):#API request to delete song from playlist 
+def api_delete_song(request):#API request to delete song from playlist 
     if request.method == 'POST':
         results = requests.delete('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+request.session.get('access_token'))
         print("Song deleted",results.text)
         print("Song deleted from playlist : ", request.POST['playlist_code'])
-        return HttpResponse("Song deleted : " , request.POST['playlist_code'])
+        return HttpResponse("Song deleted")
 
 def api_add_song(request): #API request to add song from playlist
     if request.method == 'POST':
         results = requests.post('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+request.session.get('access_token'))
         print("Song added",results.text)
         print("Song added to playlist", request.POST['playlist_code'])
-        return HttpResponse("Song added to " , request.POST['playlist_code'])
+        return HttpResponse("Song Added")
 
 def list_playlist(request):#list current playlist
     session_access_token = request.session.get('access_token')

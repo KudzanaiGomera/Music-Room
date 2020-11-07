@@ -5,12 +5,7 @@ div#artist_info{
   overflow-y: scroll;
   height: 200px;
   width: 800px;
-  position: absolute;
-}
-.test_scroll {
-  overflow-y: scroll;
-  height: 40px;
-  width: 200px;
+  margin: auto;
 }
 .overlay {
     height: 100%;
