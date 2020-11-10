@@ -2,7 +2,7 @@
 body {
   display: block;
   margin: 8px;
-  background-color: #000;
+  background-color: rgb(18, 18, 18);
   color: white;
 }
 
@@ -79,11 +79,6 @@ div#artist_info{
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-.navigation {
-    margin: 0px;
-    float: right;
-}
 .navigation li {
     list-style: none;
     float: left;
@@ -129,4 +124,10 @@ div#artist_info{
   font-size: 20px;
   margin-bottom: 7px;
 }
+}
+
+#user {
+  float:right;
+  margin-top:30px;
+  background-color: #1db954;
 }

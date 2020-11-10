@@ -19,10 +19,14 @@
   <body>
     <nav>
       <ul class="navigation">
-          <li><a href="{% url 'music' %}"><i class="fas fa-house-damage"></i> Music Room</a></li>
-          <li><a href="#"><i class="fas fa-sign-out-alt" ></i>Logout</a></li>
+        <li style="float:left"><a href="{% url 'music' %}"><i class="fas fa-house-damage onleft" ></i>Music Room</a></li>
+        <li style="float:right; margin-right: 50px;"><a href="{% url 'logoutUser' %}"><i class="fas fa-sign-out-alt onright"></i>Logout</a></li>
       </ul>
   </nav>
+  <button class="dropdown--button" id="user">
+    <span class="user-icon"><i class="lni-user"></i></span>
+    <span class="text-bold">{{request.user}}</span>
+  </button>
     <div id = "myNav" class="overlay">
       <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</p>
       <div class="overlay-content">
@@ -90,7 +94,7 @@
           {% if k.playlist_owner == user %}
             <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
             {% endif %}
-            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}--{{k.id}}</a>
+            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}</a>
             {% if k.playlist_owner == user %}  
             <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
             {% endif %}
@@ -103,7 +107,7 @@
         {% if j.playlist_owner == user %}
           <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
         {% endif %}
-          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}--{{j.id}}</a>
+          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}</a>
         {% if j.playlist_owner == user %} 
           <button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
         {% endif %}

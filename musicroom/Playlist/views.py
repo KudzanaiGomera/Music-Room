@@ -33,6 +33,7 @@ def code_check(request): #Deezer auth + user create
 
 def playlist_view(request):#Playlist view template
     # playlist = Playlist.objects.all()
+    print('This user:' ,request.user.username)
     all_users = User.objects.all()
     all_users = all_users.exclude(username=request.user.username)#remove this if issues
     public_list = Playlist.objects.filter(playlist_status='Public')

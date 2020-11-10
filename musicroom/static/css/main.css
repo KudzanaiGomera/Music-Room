@@ -56,11 +56,19 @@ body {
     align-items: center;
     height: 40px;
     transition: all 350ms;
+    -webkit-transition: all 350ms;
+    -moz-transition: all 350ms;
+    -ms-transition: all 350ms;
+    -o-transition: all 350ms;
 }
 
 .sidebar .menu.menu-extra .menu--item a img {
     opacity: 0.7;
     transition: all 350ms;
+    -webkit-transition: all 350ms;
+    -moz-transition: all 350ms;
+    -ms-transition: all 350ms;
+    -o-transition: all 350ms;
 }
 
 .sidebar .menu.menu-extra .menu--item:hover a img {
@@ -79,11 +87,15 @@ body {
     top: 0;
     height: 100%;
     left: 8px;
-    left: -16px; /* -(Sidebar's padding left) + 8px */
-    right: -16px; /* -(Sidebar's padding left) + 8px */
-    background: rgb(40, 40, 40);
+    left: -16px;
+    /*-(Sidebar'spaddingleft)+8px*/right: -16px;
+    /*-(Sidebar'spaddingleft)+8px*/background: rgb(40, 40, 40);
     z-index: -1;
     border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
 }
 
 .menu--item--text,
@@ -185,7 +197,7 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgb(45, 45, 45);
+    background-color: #1db954;
     padding: 6px 14px 6px 8px;
     font-size: 0.75rem;
     line-height: 0.75rem;

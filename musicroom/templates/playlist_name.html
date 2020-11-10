@@ -19,7 +19,8 @@
 </head>
 <body>
 <div id="dz-root"></div>
-<div id="player" style="width:100%;" align="center"></div>
+<div id="player" style="width:100%;" align="center"> 
+</div>
 <br/>
 <div class="home">
   <div id = "myNav2" class="overlay">
@@ -101,7 +102,7 @@
   {% for j in public_list%}
     <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{j.playlist_status}}
   {% endfor %}
-  <p>Login-in : {{user}}</p>
+  <p>Host : {{playlist_host}}</p>
   {{ playlist_name |json_script:"playlist-name"}}
   {{ request.user.username| json_script:"user-username" }}
 {% if playlist_status == 'Private' or user.pk == playlist_host %}
@@ -133,14 +134,14 @@
 <div id="controlers">
 	<!-- <input type="button" onclick="DZ.player.playAlbum(302127); return false;" value="Play Daft Punk - Discovery"/> -->
     <!-- <input type="button" onclick="DZ.player.playAlbum(301775); return false;" value="Play Daft Punk - Homework"/> -->
-    <input type="button" id="player_start" onclick="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
+    <input type="button" id="player_start" onload="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
 
 	<br/>
 	<!-- <input type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
 	<!-- <input type="button" onclick="DZ.player.playSmartRadio(13); return false;" value="Play Smart Radio"/> -->
 	<h1 id="tag_1"> Test1</h1> <button onclick="show_tag()">Show</button>
 	<br/>
-	<input id="play_button" type="button" onclick="DZ.player.play(); return false;" value="play"/>
+	<input id="button" type="button" onclick="DZ.player.play(); return false;" value="play"/>
 	<input type="button" onclick="DZ.player.pause(); return false;" value="pause"/>
 	<input type="button" onclick="DZ.player.prev(); return false;" value="prev"/>
   <input type="button" onclick="DZ.player.next(); return false;" value="next"/>
