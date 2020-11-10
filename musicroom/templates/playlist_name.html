@@ -35,7 +35,7 @@
       {% if artist_value%}
         <div id="artist_info">
         {% for k in artist_value%}
-          <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.artist_id}},{{k.title}},{{k.artist_name}},{{k.album_title}},{{k.duration}}" onclick="api_api_add_track_playlist(`{{k.artist_id}}`)">+</button></p>
+          <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.artist_id}},{{k.title}},{{k.artist_name}},{{k.album_title}},{{k.duration}}" onclick="api_add_track_playlist(`{{k.artist_id}}`)">+</button></p>
           <!-- <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}  |  {{k.artist_name}}|{{k.album_title}}   | {{k.duration}}" onclick="api_api_add_track_playlist(`{{k.artist_id}}`)">+</button></p> -->
           <hr></hr>
           {% endfor %}
@@ -111,13 +111,13 @@
 <ul id="List_songs">
   {%for k in current_playlist%}
   <li id={{k.artist_id}}>{{k.title}}  | {{k.album_title}} | {{k.artist_name}}| {{k.duration}}|
-    {% if playlist_status == 'Private' %}
+    <!-- {% if playlist_status == 'Private' %} -->
       <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
-    {% else %}
-      {% if user.pk == playlist_host%}
+    <!-- {% else %} -->
+      <!-- {% if user.pk == playlist_host%} -->
         <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
-      {% endif%}
-    {% endif%}
+      <!-- {% endif%} -->
+    <!-- {% endif%} -->
     <!-- <p>{{playlist_status}}</p> -->
   <!-- </p>{{playlist_host}}</p> -->
   <!-- <p> 1= james 2=nkosi</p> -->
