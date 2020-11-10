@@ -111,13 +111,13 @@
 <ul id="List_songs">
   {%for k in current_playlist%}
   <li id={{k.artist_id}}>{{k.title}}  | {{k.album_title}} | {{k.artist_name}}| {{k.duration}}|
-    <!-- {% if playlist_status == 'Private' %} -->
+    {% if playlist_status == 'Private' %}
       <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
-    <!-- {% else %} -->
-      <!-- {% if user.pk == playlist_host%} -->
+    {% else %}
+      {% if user.pk == playlist_host%}
         <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
-      <!-- {% endif%} -->
-    <!-- {% endif%} -->
+      {% endif%}
+    {% endif%}
     <!-- <p>{{playlist_status}}</p> -->
   <!-- </p>{{playlist_host}}</p> -->
   <!-- <p> 1= james 2=nkosi</p> -->
