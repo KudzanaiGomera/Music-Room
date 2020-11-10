@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 from django.urls import path, include
 
 from . import views 
-from Playlist.views import code_check, playlist_view,playlist_add,playlist_delete,api_add_song,api_delete_song
+from Playlist.views import code_check, playlist_view,playlist_add,playlist_delete,api_add_song,api_delete_song,get_host
 
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('playlist_delete/',playlist_delete,name='playlist_delete'),
     path('api_add_song/',api_add_song,name='api_add_song'),
     path('api_delete_song/',api_delete_song,name='api_delete_song'),
+    path('get_host/',get_host,name='get_host'),
     
     # Playlist code end
     path('login.html', views.login2, name='login2'),

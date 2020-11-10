@@ -58,8 +58,6 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
         )
         await self.accept()
 
-
-
     async def disconnect(self,close_code):
         await self.channel_layer.group_discard(
             self.playlist_list_name,
@@ -74,6 +72,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
         duration = text_data_json['duration'],
         user_name = text_data_json['user_name'],
         delete_song = text_data_json['delete_song'],
+        # vote_count = text_data_json['vote_count'],
 
         await self.channel_layer.group_send(
             self.playlist_list_name,
@@ -86,6 +85,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
                 'duration':duration,
                 'user_name':user_name,
                 'delete_song':delete_song,
+                # 'vote_count':vote_count,
             }
         )
     async def playlist_build(self,event):
@@ -95,7 +95,8 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
         album_title=event['album_title'],
         duration=event['duration'],
         user_name= event['user_name'],
-        delete_song= event['delete_song'], 
+        delete_song= event['delete_song'],
+        # vote_count = event['vote_count'],
 
         await self.send(text_data=json.dumps({
             'message':message,
@@ -105,7 +106,11 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
             'duration':duration,
             'user_name': user_name,
             'delete_song':delete_song,
+            # 'vote_count':vote_count,
         }))
+
+    async def notify(self,event):
+        self.send(text_data=json.dumps(event["text"]))
 
 
     # pass

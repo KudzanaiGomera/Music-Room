@@ -32,8 +32,8 @@ def code_check(request): #Deezer auth + user create
     #delete_track(request,'8266792942')
     # create_playlist(request)
     # add_track(request)
-    #delete_playlist(request,'8266792942')
-    return redirect("/playlist_view")
+    #delete_playlist(request,'8266792942')  
+    return redirect("/music.html")
 
 
 def playlist_view(request):#Playlist view template
@@ -65,6 +65,20 @@ def get_host(request): #playlist
     for k in get_host:
         host=k.playlist_owner
     return HttpResponse(host)
+
+def get_search_results(request):
+    artist_value = []
+    if request.method == 'POST' and request.POST['search_artist']:
+        name = request.POST['search_artist']
+        print("Searching for user :",name)
+        search_url2 = 'https://api.deezer.com/search/track?q=' + str(name)+'&limit=10'
+        json_response = requests.get(search_url2).json()
+        info = json_response['data']
+        for k in info:
+            time_value =datetime.timedelta(seconds=k['duration'])
+            value={'artist_id': k['id'],'artist_name':k['artist']['name'],'title': k['title'],'preview_link':k['preview'],'album_art':k['album']['cover_medium'], 'duration':time_value,'album_title':k['album']['title']}
+            artist_value.append(value)
+
 
 def playlist_name(request,playlist_name):#Get playlist name + search_results
     artist_value = []
