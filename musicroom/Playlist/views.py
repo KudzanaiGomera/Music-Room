@@ -27,12 +27,7 @@ def code_check(request): #Deezer auth + user create
     User.objects.get_or_create(username=deezer_username,email=deezer_email)
     user = User.objects.get(email=deezer_email)
     login(request,user,backend='django.contrib.auth.backends.ModelBackend')
-    user.is_active=True
-    
-    #delete_track(request,'8266792942')
-    # create_playlist(request)
-    # add_track(request)
-    #delete_playlist(request,'8266792942')  
+    user.is_active=True 
     return redirect("/music.html")
 
 
@@ -65,20 +60,6 @@ def get_host(request): #playlist
     for k in get_host:
         host=k.playlist_owner
     return HttpResponse(host)
-
-def get_search_results(request):
-    artist_value = []
-    if request.method == 'POST' and request.POST['search_artist']:
-        name = request.POST['search_artist']
-        print("Searching for user :",name)
-        search_url2 = 'https://api.deezer.com/search/track?q=' + str(name)+'&limit=10'
-        json_response = requests.get(search_url2).json()
-        info = json_response['data']
-        for k in info:
-            time_value =datetime.timedelta(seconds=k['duration'])
-            value={'artist_id': k['id'],'artist_name':k['artist']['name'],'title': k['title'],'preview_link':k['preview'],'album_art':k['album']['cover_medium'], 'duration':time_value,'album_title':k['album']['title']}
-            artist_value.append(value)
-
 
 def playlist_name(request,playlist_name):#Get playlist name + search_results
     artist_value = []
@@ -159,9 +140,6 @@ def playlist_delete(request): #Delete  playlist in database
 def api_create_playlist(request,playlist_name):#API request to create playlist
     results=requests.post('https://api.deezer.com/user/me/playlists?title='+playlist_name+'&collaborative='+str(False)+'&access_token='+request.session.get('access_token'))
     print("Playlist id :" ,results.json()['id'])
-    # api_add_song(request,results.json()['id'])
-    # api_delete_song(request,results.json()['id'])
-    
     return results.json()['id']
 
 def api_delete_playlist(request,code):#API request to delete song from playlist

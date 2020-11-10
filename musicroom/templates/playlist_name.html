@@ -23,7 +23,7 @@
 <br/>
 <div class="home">
   <div id = "myNav2" class="overlay">
-    <p href="javascript:void(0)" class="closebtn" onclick="closeNav2();close_search()">&times;</p>
+    <p href="javascript:void(0)" class="closebtn" onclick="closeNav2();">&times;</p>
     <div class="overlay-content">
       <p> Add tracks to playlist</p>
       <form method="POST" >{% csrf_token %}
@@ -137,9 +137,9 @@
 	<br/>
 	<!-- <input type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
 	<!-- <input type="button" onclick="DZ.player.playSmartRadio(13); return false;" value="Play Smart Radio"/> -->
-	
+	<h1 id="tag_1"> Test1</h1> <button onclick="show_tag()">Show</button>
 	<br/>
-	<input type="button" onclick="DZ.player.play(); return false;" value="play"/>
+	<input id="play_button" type="button" onclick="DZ.player.play(); return false;" value="play"/>
 	<input type="button" onclick="DZ.player.pause(); return false;" value="pause"/>
 	<input type="button" onclick="DZ.player.prev(); return false;" value="prev"/>
   <input type="button" onclick="DZ.player.next(); return false;" value="next"/>
@@ -153,7 +153,11 @@
 <div id="slider_seek" class="progressbarplay" style="">
   <div class="bar" style="width: 0%;"></div>
 </div>
-<script>  
+<script>
+function show_tag()
+{ 
+    document.getElementById("tag_1").style.visibility ="hidden";
+}
 	$(document).ready(function(){
 		$("#controlers input").attr('disabled', true);
 		$("#slider_seek").click(function(evt,arg){
@@ -180,7 +184,13 @@
       console.log('arg:',arg[0])
 			$("#slider_seek").find('.bar').css('width', (100*arg[0]/arg[1]) + '%');
 		});
-    // DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;
+
+    DZ.player.playPlaylist(parseInt(`{{playlist_id}}`),true); return false;
+    DZ.player.next(); return false;
+    // document.getElementById('play_button').click()
+    
+    
+    // DZ.player.pause(); return false;
     // DZ.player.seek(50); return false;
 	}
 	DZ.init({
@@ -272,6 +282,7 @@ playlist_Socket.onmessage =function(e){
       'user_name': '',
       'delete_song':messageInputDom,
       }));
+      // DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;
  }
 
 function api_add_track_playlist(track_id)
@@ -308,12 +319,7 @@ function add_search_track(track_id)
 // });
 // }
 
-// 
-function start()
-{
-  
-  document.getElementById("player_start").click()
-}
+//
 
 
 
