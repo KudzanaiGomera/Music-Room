@@ -78,6 +78,7 @@
             name_div.appendChild(create_hr)
 
           })
+          
           // document.getElementById('private_user_list').textContent=names[0]
         </script>
         <!-- <p>{{k.playlist_members}}</p> -->
@@ -89,16 +90,16 @@
     <a href="/music.html">Home</a>
   <h1>
   {% if user.pk == playlist_host %}
-  <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]  
+  <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]  
   {% endif %}
-  Playlist : {{playlist_name}}
+  MusicRoom : {{playlist_name}}
   </h1>
   {% for k in private_list%}
-    <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40">{{k.playlist_status}} : 
+    <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{k.playlist_status}} : 
     <a href="#" onclick="edit_user();return false  ">List of users</a>
   {% endfor %}
   {% for j in public_list%}
-    <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40">{{j.playlist_status}}
+    <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{j.playlist_status}}
   {% endfor %}
   <p>Login-in : {{user}}</p>
   {{ playlist_name |json_script:"playlist-name"}}
@@ -184,9 +185,8 @@ function show_tag()
       console.log('arg:',arg[0])
 			$("#slider_seek").find('.bar').css('width', (100*arg[0]/arg[1]) + '%');
 		});
-
     DZ.player.playPlaylist(parseInt(`{{playlist_id}}`),true); return false;
-    DZ.player.next(); return false;
+    DZ.player.play(); return false;
     // document.getElementById('play_button').click()
     
     
@@ -198,7 +198,10 @@ function show_tag()
 		channelUrl : 'http://developers.deezer.com/examples/channel.php',
 		player : {
 			container : 'player',
-			cover : true,
+      cover : true,
+      autoplay : true,
+      format : 'classic',
+      layout : 'dark',
 			playlist : true,
 			width : 650,
 			height : 300,

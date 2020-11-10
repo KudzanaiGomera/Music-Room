@@ -1,6 +1,11 @@
-/* *{ */
-    /* box-sizing: border-box; */
-/* } */
+
+body {
+  display: block;
+  margin: 8px;
+  background-color: #000;
+  color: white;
+}
+
 div#artist_info{
   overflow-y: scroll;
   height: 200px;
@@ -29,20 +34,12 @@ div#artist_info{
   }
   .user_details input{
     border: 0;
-    font-size: 30px;
-    /* playlist */
   }
-  /* .user_list{ */
-    /* border-top: 2px solid #999999; */
-    /* playlist */
-  /* } */
   .user_list > div{
     padding: 15px;
     font-size: 20px;
     color: white;
-    /* border-top: 1px solid #999999; */
     cursor: pointer;
-    /* playlist */
   }
   .user_list > div:hover{
     background-color: #1e4dd4;
@@ -50,7 +47,7 @@ div#artist_info{
 
   .overlay-content {
     position: relative;
-    top: 25%;
+    top: 17%;
     width: 100%;
     text-align: center;
     margin-top: 30px;
@@ -63,7 +60,11 @@ div#artist_info{
     color: #818181;
     display: block;
     transition: 0.3s;
-  }
+    -webkit-transition: 0.3s;
+    -moz-transition: 0.3s;
+    -ms-transition: 0.3s;
+    -o-transition: 0.3s;
+}
   
   .overlay .closebtn {
     position: absolute;
@@ -71,3 +72,61 @@ div#artist_info{
     right: 45px;
     font-size: 60px;
   }
+
+  .playlistz {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.navigation {
+    margin: 0px;
+    float: right;
+}
+.navigation li {
+    list-style: none;
+    float: left;
+}
+.navigation li a {
+    color: #fff;
+    padding: 28px 15px;
+    text-transform: uppercase;
+    text-align: center;
+    display: block;
+    text-decoration: none;
+}
+.navigation li a i {
+    width: 100%;
+    font-size: 20px;
+    margin-bottom: 7px;
+}
+
+/*-- Responsive CSS --*/
+@media screen and (max-width:767px) {
+.show-menu-btn,
+.hide-menu-btn {
+    display: block;
+}
+.navigation {
+  margin: 0px;
+  float: right;
+}
+.navigation li {
+  list-style: none;
+  float: left;
+}
+.navigation li a {
+  color: #fff;
+  padding: 28px 15px;
+  text-transform: uppercase;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+}
+.navigation li a i {
+  width: 100%;
+  font-size: 20px;
+  margin-bottom: 7px;
+}
+}

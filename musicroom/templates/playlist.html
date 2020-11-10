@@ -2,26 +2,38 @@
 {% load static %}
 <html>
   <head>
-    <meta charset="utf-8">
-    <title>Home page</title>
-    <meta name="description" content="Hypertube">
+    
+    <title>MusicRoom</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
     <script src="{% static 'js/Playlist.js' %}"></script>
+    <link rel="stylesheet" href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
   </head>
   
   <body>
+    <nav>
+      <ul class="navigation">
+          <li><a href="{% url 'music' %}"><i class="fas fa-house-damage"></i> Music Room</a></li>
+          <li><a href="#"><i class="fas fa-sign-out-alt" ></i>Logout</a></li>
+      </ul>
+  </nav>
     <div id = "myNav" class="overlay">
       <p href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</p>
       <div class="overlay-content">
-        <p>Create Playlist:<input type="text" id="playlist_name">
-        Private<input type="checkbox" id="playlist_status" name></p>
+        <h3>Create Playlist:<input type="text" id="playlist_name">
+        Private<input type="checkbox" id="playlist_status" name></h3>
         <div id = "myNav5" class="overlay">
             <div class="user_details">
               <h id=message_users></h>
-              <p>Please select users</p>
-              <p id="Add_users"></p>
-            <input id="user_input" type="text" placeholder="Add users..."><button id="add_private_id"onclick="add_private_user()">Add user</button>
+             
+              <h4>Invite Users: <input id="user_input" type="text" placeholder="Add users..."></h4>
+              <button id="add_private_id"onclick="add_private_user()">Add user</button>
             <script>
                private_user_array=[`{{user}}`]
                console.log("Current list",private_user_array)
@@ -67,27 +79,34 @@
       </div>
     </div>
 
-
-    <div class="home">
-      
-      <p>--Playlist--</p>
+    
+    <div class="container-fluid">
+      <div class="col-lg-6">
+        <div row class="playlistz">
+          <p>--Public MusicRoom Playlist--</p>
       <div id="public_label">
         {% for k in public_list %}
         <p id={{k.id}}> 
           {% if k.playlist_owner == user %}
-            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
             {% endif %}
-            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}--{{k.id}}</a>  <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
+            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}--{{k.id}}</a>
+            {% if k.playlist_owner == user %}  
+            <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
+            {% endif %}
         <!-- <p>{{k.playlist_name}}<button id="Delete_playlist_button" value={{k.id}} onclick="Delete_playlist('{{k.id}}')">Delete</button></p> -->
         {% endfor %}
       </div>
-      <div id="private_label">--Private--</div>
+      <div id="private_label">--Private MusicRoom Playlist--</div>
       {% for j in private_list %}
-      <p id={{j.id}}>
+        <p id={{j.id}}>
         {% if j.playlist_owner == user %}
-          <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25">[Host]
+          <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
         {% endif %}
-          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}--{{j.id}}</a><button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}--{{j.id}}</a>
+        {% if j.playlist_owner == user %} 
+          <button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+        {% endif %}
       {% endfor %}
       <p>Current Log-on : {{user}}</p>
         <!-- Search:<input><br> -->
@@ -95,9 +114,40 @@
         <button onclick="openNav()">Create Playlist</button>
       
       <p>{{form}}</p>
-      <h>List of Playlist</h>
+      <!-- <h>List of Playlist</h> -->
+        </div>
+
+     
+      </div>
+    </div>
+    <div class="bottom-bar">
+      <div class="bottom-bar--left-col">
+          <div class="bottom-bar--left-col--song">
+              <div class="bottom-bar--left-col--song--img">
+                  <div class="bottom-bar--left-col--song--img--pull-up">
+                      <i class='lni lni-chevron-up'></i>
+                  </div>
+              </div>
+              <div class="bottom-bar--left-col--song--details">
+                  <div class="bottom-bar--left-col--song--details--wrapper">
+                      <a class="bottom-bar--left-col--song--details--title">© 2020 Music Room</a>
+                  </div>
+                  <div class="bottom-bar--left-col--song--details--wrapper">
+                      <a class="bottom-bar--left-col--song--details--artist">Find A Vibe, Enjoy The Party</a>
+                  </div>
+              </div>
+          </div>
+          <!-- <div class="bottom-bar--left-col--actions">
+              <button class="bottom-bar--left-col--actions--favorite">
+                  <i class='lni lni-heart'></i>
+              </button>
+              <button class="bottom-bar--left-col--actions--pip">
+                  <i class="pip-icon"></i>
+              </button>
+          </div> -->
+      </div>
+  </div> 
 </body>
-<footer>Music Room 2020</footer>
 </html>
 <script>
   function remove_socket_buttons(tag,value)
