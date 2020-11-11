@@ -33,7 +33,6 @@ def code_check(request): #Deezer auth + user create
 
 def playlist_view(request):#Playlist view template
     # playlist = Playlist.objects.all()
-    print('This user:' ,request.user.username)
     all_users = User.objects.all()
     all_users = all_users.exclude(username=request.user.username)#remove this if issues
     public_list = Playlist.objects.filter(playlist_status='Public')
@@ -84,7 +83,8 @@ def playlist_name(request,playlist_name):#Get playlist name + search_results
         playlist_id = j['playlist_id']
     get_host = Playlist.objects.filter(playlist_id=playlist_id).values('playlist_owner')#get host of playlist
     for m in get_host:
-        playlist_host=m['playlist_owner']
+        playlist_host=User.objects.get(pk=m['playlist_owner'])
+
     get_status= Playlist.objects.filter(playlist_id=playlist_id).values('playlist_status')#get playlist private or public status
     for q in get_status:
         playlist_status=q['playlist_status']

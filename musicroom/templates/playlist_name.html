@@ -90,22 +90,30 @@
     <a href="/playlist_view">Back to Playlist</a>
     <a href="/music.html">Home</a>
   <h1>
-  {% if user.pk == playlist_host %}
-  <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]  
+  {% if user == playlist_host %}
+    <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
+  {% else %}  
+    <img src="{% static 'images/play_icon.png' %}" alt="default_pic" width="39" height="39">
   {% endif %}
-  MusicRoom : {{playlist_name}}
+    MusicRoom : {{playlist_name}}
   </h1>
   {% for k in private_list%}
     <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{k.playlist_status}} : 
-    <a href="#" onclick="edit_user();return false  ">List of users</a>
+    <a href="#" onclick="This user:();return false  ">List of users</a>
   {% endfor %}
   {% for j in public_list%}
     <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{j.playlist_status}}
   {% endfor %}
-  <p>Host : {{playlist_host}}</p>
+  <p>Host : 
+    {% if user == playlist_host%}
+      You
+    {% else %}
+      {{playlist_host}}
+    {% endif%}
+  </p>
   {{ playlist_name |json_script:"playlist-name"}}
   {{ request.user.username| json_script:"user-username" }}
-{% if playlist_status == 'Private' or user.pk == playlist_host %}
+{% if playlist_status == 'Private' or user == playlist_host %}
   <button id="Search_results" onclick="openNav2()"> Add tracks to Playlist</button>
 {% endif %}
 
@@ -116,7 +124,7 @@
     {% if playlist_status == 'Private' %}
       <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
     {% else %}
-      {% if user.pk == playlist_host%}
+      {% if user == playlist_host%}
         <button id="remove_song_id" onclick="delete_song(`{{k.artist_id}}`);delete_track_playlist(`{{k.artist_id}}`)">remove</button></li>
       {% endif%}
     {% endif%}

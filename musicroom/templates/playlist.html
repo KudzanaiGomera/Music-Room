@@ -92,12 +92,14 @@
         {% for k in public_list %}
         <p id={{k.id}}> 
           {% if k.playlist_owner == user %}
-            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
-            {% endif %}
+            <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="35" height="35" style="filter:invert(100%)">[Host]</pre>
+          {% else %}
+            <img src="{% static 'images/play_icon.png' %}" alt="default_pic" width="39" height="39">
+          {% endif %}
             <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}</a>
-            {% if k.playlist_owner == user %}  
+          {% if k.playlist_owner == user %}  
             <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
-            {% endif %}
+          {% endif %}
         <!-- <p>{{k.playlist_name}}<button id="Delete_playlist_button" value={{k.id}} onclick="Delete_playlist('{{k.id}}')">Delete</button></p> -->
         {% endfor %}
       </div>
@@ -112,10 +114,9 @@
           <button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
         {% endif %}
       {% endfor %}
-      <p>Current Log-on : {{user}}</p>
         <!-- Search:<input><br> -->
         <!-- <button>Search</button> -->
-        <button onclick="openNav()">Create Playlist</button>
+        <br><br><button onclick="openNav()">Create Playlist</button>
       
       <p>{{form}}</p>
       <!-- <h>List of Playlist</h> -->
