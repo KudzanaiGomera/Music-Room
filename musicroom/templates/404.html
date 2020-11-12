@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/> 
+</head>
+<body>
+    <div id ="404">
+        <p>Playlist doesn't anymore</p>
+        <p>Please click button to return to playlist page</p>
+        <img src="{% static 'images/404.png' %}" alt="default_pic" style="filter:invert(100%)">
+        <a href="/playlist_view"><br><button>Go to playlist</button></a>
+    </div>
+</body>
+<html>

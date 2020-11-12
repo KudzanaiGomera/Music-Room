@@ -74,11 +74,11 @@ def playlist_name(request,playlist_name):#Get playlist name + search_results
             time_value =datetime.timedelta(seconds=k['duration'])
             value={'artist_id': k['id'],'artist_name':k['artist']['name'],'title': k['title'],'preview_link':k['preview'],'album_art':k['album']['cover_medium'], 'duration':time_value,'album_title':k['album']['title']}
             artist_value.append(value)
-
-
     private_list = Playlist.objects.filter(playlist_status='Private').filter(playlist_name=playlist_name)
     public_list = Playlist.objects.filter(playlist_status='Public').filter(playlist_name=playlist_name)
     get_pk = Playlist.objects.filter(playlist_name=playlist_name).values('playlist_id')
+    if not get_pk:
+        return render(request,'404.html')
     for j in get_pk:
         playlist_id = j['playlist_id']
     get_host = Playlist.objects.filter(playlist_id=playlist_id).values('playlist_owner')#get host of playlist
@@ -151,16 +151,17 @@ def api_delete_playlist(request,code):#API request to delete song from playlist
 
 def api_delete_song(request):#API request to delete song from playlist 
     if request.method == 'POST':
-        results = requests.delete('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+request.session.get('access_token'))
+        if request.user.username != fetch_host(request.POST['playlist_code']):
+            access_token = fetch_token(request.POST['playlist_code'])
+        else:
+            access_token = request.session.get('access_token')
+        results = requests.delete('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+access_token)
         print("Song deleted",results.text)
         print("Song deleted from playlist : ", request.POST['playlist_code'])
         return HttpResponse("Song deleted")
 
 def api_add_song(request): #API request to add song from playlist
     if request.method == 'POST':
-        print('here is the host :',fetch_host(request.POST['playlist_code']))
-        print('here is the acess_token :', fetch_token(request.POST['playlist_code']))
-        print('Current user',request.user.username)
         if request.user.username != fetch_host(request.POST['playlist_code']):
             access_token = fetch_token(request.POST['playlist_code'])
         else:
@@ -169,7 +170,7 @@ def api_add_song(request): #API request to add song from playlist
         print("Song added",results.text)
         print("Song added to playlist", request.POST['playlist_code'])
         return HttpResponse("Song Added")
-    
+
 def fetch_host(playlist_code):#get host from database
     get_host = Playlist.objects.filter(playlist_id=playlist_code).values('playlist_owner')#get host of playlist
     for m in get_host:

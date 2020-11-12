@@ -73,9 +73,11 @@
             create_div.innerHTML=results
             if (results != playlist_owner)
             {
-              var create_btn = document.createElement('button')
+              var create_btn = document.createElement('input')
+              create_btn.setAttribute('type', 'checkbox')
               create_btn.setAttribute('onclick','Give_player_rights()')
-              create_btn.setAttribute('id', 'permission_button')
+              create_btn.setAttribute('name', 'permission_button')
+              create_btn.setAttribute('id', results)
               create_btn.appendChild(document.createTextNode('Give playlist rights'))
               create_div.appendChild(create_btn)}
               name_div.appendChild(create_hr)
@@ -168,6 +170,8 @@
   <div class="bar" style="width: 0%;"></div>
 </div>
 <script>
+  console.log(`{{playlist_host}}`)
+  console.log(`{{user}}`)
 function show_tag()
 { 
     document.getElementById("tag_1").style.visibility ="hidden";
@@ -241,33 +245,32 @@ results.addEventListener('click',function(k)
     'delete_song':''}));
 })})
 document.querySelector('#remove_song_id')   
-// vote_array = [];
-// var get_store = localStorage.getItem('vote_array');
-// store_parse_value=JSON.parse(get_store);
-// console.log(get_store);
-// vote_array = localStorage.getItem('vote_array').split('*')
-// console.log('from local storage',vote_array[0])
 playlist_Socket.onmessage =function(e){
   const data = JSON.parse(e.data);
   console.log('This is the data : ',data);
-  // if (data.message[0] != '')
-  // { 
-    // vote_array.push([data.track_id[0],data.message[0],1]);
-    // localStorage.setItem("vote_array",{'track_id':data.track_id[0],'trackname':data.message[0],'vote':1})
-    // console.log(vote_array)
-  // }
   var add_song= document.createElement("li");
   var remove_song = document.createElement("button");
   remove_song.appendChild(document.createTextNode('remove'));
-  remove_song.setAttribute('content','test1');
+  // remove_song.setAttribute('content','test1');
   var song_input=data.message[0];
   remove_song.setAttribute('id','remove_song_id');
   add_song.setAttribute('id',data.track_id[0]);
   remove_song.setAttribute("onclick","delete_song('"+data.track_id[0]+"');delete_track_playlist("+data.track_id[0]+")");
   var create_node =document.createTextNode(song_input+' '+' | '+data.album_title[0]+'|'+data.artist_name[0]+'|'+data.duration[0]+'|');
   add_song.appendChild(create_node);
+  console.log('Before')
+  console.log("status:",`{{playlist_status}}`)
+  console.log("host",`{{playlist_host}}`)
+  console.log("user",`{{user}}`)
+  if (`{{playlist_status}}` == 'Private' || `{{playlist_host}}` == `{{user}}`)
+  {
+      add_song.appendChild(remove_song)
+      console.log('im here!!!')
+  }
   if (song_input !="" && data.delete_song[0] == '')
     var x=document.getElementById("List_songs").appendChild(add_song);
+  // if (`{{playlist_status}}` == 'Private' && `{{plyalist_host}}` == `{{user}}`)
+    // document.getElementById("List_songs").appendChild(add_song).appendChild(remove_song);
   console.log('delete output: ',data.delete_song[0][0]);
   if (data.delete_song[0] != '')
     {
@@ -362,7 +365,10 @@ function edit_user()
   // end of script
 function Give_player_rights()
 {
-  document.querySelectorAll('#permission_button')
+  // permission_check = document.querySelectorAll('#permission_button')
+  // permission_check.forEach(function(results){
+  // results.addEventListener('click',function(k){
+  // console.log('temp value',temp);
 }
 </script><br/>
 event_listener : <br/>
