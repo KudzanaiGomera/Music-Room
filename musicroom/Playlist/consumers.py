@@ -20,6 +20,7 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
         delete_playlist=text_data_json['delete_playlist']
         playlist_pk=text_data_json['playlist_pk']
         status=text_data_json['status']
+        host=text_data_json['host']
         # Playlist()
 
         await self.channel_layer.group_send(
@@ -30,6 +31,7 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
                 'delete_playlist':delete_playlist,
                  'playlist_pk':playlist_pk,
                  'status':status,
+                 'host':host,
             }
         )
     async def playlist_name_build(self,event):
@@ -37,12 +39,14 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
         delete_playlist = event['delete_playlist'],
         playlist_pk=event['playlist_pk'],
         status=event['status'],
+        host = event['host'],
 
         await self.send(text_data=json.dumps({
             'playlist_name':playlist_name,
             'delete_playlist':delete_playlist,
             'playlist_pk':playlist_pk,
             'status':status,
+            'host':host
         }))
     
 

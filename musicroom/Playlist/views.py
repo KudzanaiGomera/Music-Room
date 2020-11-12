@@ -55,7 +55,7 @@ def playlist_view(request):#Playlist view template
     # list_playlist(request)
     
     return render(request,"playlist.html",context)
-def get_host(request): #playlist
+def get_host_db(request): #playlist
     get_host= Playlist.objects.filter(id=request.POST['id'])
     for k in get_host:
         host=k.playlist_owner
