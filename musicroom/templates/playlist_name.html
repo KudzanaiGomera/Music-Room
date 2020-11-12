@@ -30,7 +30,7 @@
       <form method="POST" >{% csrf_token %}
         <p>Search music<input id="search_artist" name="search_artist" type="text" placeholder="Enter artist/track.."></p>
         <button id="artist_enter" onclick="openNav2()">Enter</button>
-        <!-- <button id="clear_search_results" name="clear_search_results">Clear search</button> -->
+        <button id="clear_search_results" name="clear_search_results">Clear search</button>
       </form>
       <br>
       {% if artist_value%}
@@ -74,6 +74,8 @@
             if (results != playlist_owner)
             {
               var create_btn = document.createElement('button')
+              create_btn.setAttribute('onclick','Give_player_rights()')
+              create_btn.setAttribute('id', 'permission_button')
               create_btn.appendChild(document.createTextNode('Give playlist rights'))
               create_div.appendChild(create_btn)}
               name_div.appendChild(create_hr)
@@ -193,7 +195,7 @@ function show_tag()
 		});
 		DZ.Event.subscribe('player_position', function(arg){
 			event_listener_append('position', arg[0], arg[1]);
-      console.log('arg:',arg[0])
+      // console.log('arg:',arg[0])
 			$("#slider_seek").find('.bar').css('width', (100*arg[0]/arg[1]) + '%');
 		});
     DZ.player.playPlaylist(parseInt(`{{playlist_id}}`),true); return false;
@@ -239,20 +241,21 @@ results.addEventListener('click',function(k)
     'delete_song':''}));
 })})
 document.querySelector('#remove_song_id')   
-vote_array = [];
-var get_store = localStorage.getItem('vote_array');
+// vote_array = [];
+// var get_store = localStorage.getItem('vote_array');
 // store_parse_value=JSON.parse(get_store);
 // console.log(get_store);
 // vote_array = localStorage.getItem('vote_array').split('*')
 // console.log('from local storage',vote_array[0])
 playlist_Socket.onmessage =function(e){
   const data = JSON.parse(e.data);
-  if (data.message[0] != '')
-  { 
-    vote_array.push([data.track_id[0],data.message[0],1]);
+  console.log('This is the data : ',data);
+  // if (data.message[0] != '')
+  // { 
+    // vote_array.push([data.track_id[0],data.message[0],1]);
     // localStorage.setItem("vote_array",{'track_id':data.track_id[0],'trackname':data.message[0],'vote':1})
-    console.log(vote_array)
-  }
+    // console.log(vote_array)
+  // }
   var add_song= document.createElement("li");
   var remove_song = document.createElement("button");
   remove_song.appendChild(document.createTextNode('remove'));
@@ -357,7 +360,10 @@ function edit_user()
   openNav()
 }
   // end of script
-
+function Give_player_rights()
+{
+  document.querySelectorAll('#permission_button')
+}
 </script><br/>
 event_listener : <br/>
 <pre id="event_listener" style="height:100px;overflow:auto;"></pre>

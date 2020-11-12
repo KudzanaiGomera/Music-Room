@@ -32,6 +32,7 @@ class Playlist(models.Model):
             )
     playlist_name = models.TextField(blank=False,max_length=240)
     playlist_owner = models.ForeignKey(User,on_delete=models.CASCADE,default=None)
+    owner_access_token = models.TextField(blank=False,max_length=20)
     playlist_members = models.TextField(blank=False,max_length=1000)
     playlist_id = models.TextField(blank=False,max_length=20)
     playlist_status =models.CharField(max_length=7,choices=STATUS,default="Public")

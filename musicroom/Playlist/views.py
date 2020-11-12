@@ -124,6 +124,7 @@ def playlist_add(request):# Add playlist in database
         playlist_owner=request.user,
         playlist_members = request.POST['user_string'],
         playlist_status = value,
+        owner_access_token = request.session.get('access_token'),
         playlist_id = api_create_playlist(request,request.POST['play_name']),
         )
     if Playlist.objects.filter(playlist_name=request.POST['play_name']).filter(playlist_owner=request.user).count() < 1:
@@ -157,10 +158,30 @@ def api_delete_song(request):#API request to delete song from playlist
 
 def api_add_song(request): #API request to add song from playlist
     if request.method == 'POST':
-        results = requests.post('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+request.session.get('access_token'))
+        print('here is the host :',fetch_host(request.POST['playlist_code']))
+        print('here is the acess_token :', fetch_token(request.POST['playlist_code']))
+        print('Current user',request.user.username)
+        if request.user.username != fetch_host(request.POST['playlist_code']):
+            access_token = fetch_token(request.POST['playlist_code'])
+        else:
+            access_token = request.session.get('access_token')
+        results = requests.post('https://api.deezer.com/playlist/'+str(request.POST['playlist_code'])+'/tracks'+'?songs='+request.POST['track_id']+'&access_token='+access_token)
         print("Song added",results.text)
         print("Song added to playlist", request.POST['playlist_code'])
         return HttpResponse("Song Added")
+    
+def fetch_host(playlist_code):#get host from database
+    get_host = Playlist.objects.filter(playlist_id=playlist_code).values('playlist_owner')#get host of playlist
+    for m in get_host:
+        playlist_host=User.objects.get(pk=m['playlist_owner'])
+    return playlist_host
+
+def fetch_token(playlist_code):#get access token from database
+    get_token = Playlist.objects.filter(playlist_id=playlist_code).values('owner_access_token')
+    for m in get_token:
+        host_access_token=m['owner_access_token']
+    return host_access_token
+
 
 def list_playlist(request):#list current playlist
     session_access_token = request.session.get('access_token')
