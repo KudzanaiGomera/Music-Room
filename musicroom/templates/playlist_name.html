@@ -211,17 +211,17 @@ function show_tag()
     // DZ.player.seek(50); return false;
 	}
 	DZ.init({
-		appId  : '8',
-		channelUrl : 'http://developers.deezer.com/examples/channel.php',
+		appId  : '439802',
+		channelUrl : 'http://localhost:8000/channel.html',
 		player : {
 			container : 'player',
       cover : true,
       autoplay : true,
-      format : 'classic',
+      format : 'square',
       layout : 'dark',
-			playlist : true,
-			width : 650,
-			height : 300,
+			// playlist : true,
+			width : 450,
+			height : 450,
 			onload : onPlayerLoaded
 		}
   });

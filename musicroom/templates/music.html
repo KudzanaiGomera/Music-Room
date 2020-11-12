@@ -1,5 +1,7 @@
 {% extends 'base2.html' %}
 
+{% load static %}
+
 {% block content %}
 
 <main>
@@ -12,7 +14,7 @@
         <div class="section--body">
             <div class="section--body--item album--item">
                 <div class="section--body--item--img">
-                    <img src="http://via.placeholder.com/150x150" alt="">
+                   <img src="{% static 'images/youtube-vibes-logo.png' %}" alt="default_pic" width="150" height="150">
                 </div>
                 <p class="section--body--item--title">Album name</p>
                 <p class="section--body--item--subtitle"><a href="#">Artist name</a></p>
@@ -23,7 +25,7 @@
 
             <div class="section--body--item artist--item">
                 <div class="section--body--item--img">
-                    <img src="http://via.placeholder.com/150x150" alt="">
+                   <img src="{% static 'images/youtube-vibes-logo.png' %}" alt="default_pic" width="150" height="150">
                 </div>
                 <p class="section--body--item--title">LEX</p>
                 <p class="section--body--item--subtitle">Artist</p>
@@ -37,32 +39,50 @@
     <section class="section">
         <div class="section--header">
             <div class="section--header--left">
-                <h2 class="title">Jump back in</h2>
-                <h3 class="subtitle">What you listened most in the last months.</h3>
+                <h2 class="title">Jump back into your very own Vibe</h2>
+                <!-- <h3 class="subtitle">What you listened most in the last months.</h3> -->
             </div>
         </div>
         <div class="section--body">
-            <div class="section--body--item album--item">
-                <div class="section--body--item--img">
-                    <img src="http://via.placeholder.com/150x150" alt="">
-                </div>
-                <p class="section--body--item--title">Album name</p>
-                <p class="section--body--item--subtitle"><a href="#">Artist name</a></p>
-                <div class="section--body--item--play">
-                    <i class="lni lni-play"></i>
-                </div>
+    <!-- <p>--Public MusicRoom Playlist--</p> -->
+        <div id="public_label">
+            {% for k in public_list %}
+              {% if k.playlist_owner == user %}
+                  <p id={{k.id}}>
+                    <div id={{k.id}} class="section--body--item album--item">
+                        <div class="section--body--item--img">
+                            <!--<img src="{% static 'images/youtube-vibes-logo.png' %}" alt="default_pic" width="150" height="150"> -->
+                            <img src="{% static 'images/youtube-vibes-logo.png' %}" alt="default_pic" width="150" height="150">
+                        </div>
+                        <p class="section--body--item--title">{{k.playlist_name}}</p>
+                        <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}</a>
+                        <p class="section--body--item--subtitle"><a href="#">{{k.playlist_owner}}</a></p>
+                        <div class="section--body--item--play">
+                            <i class="lni lni-play"></i>
+                        </div>
+                    </div> 
+                {% endif %}
+              {% endfor %}
             </div>
-
-            <div class="section--body--item artist--item">
-                <div class="section--body--item--img">
-                    <img src="http://via.placeholder.com/150x150" alt="">
-                </div>
-                <p class="section--body--item--title">LEX</p>
-                <p class="section--body--item--subtitle">Artist</p>
-                <div class="section--body--item--play">
-                    <i class="lni lni-play"></i>
-                </div>
-            </div>
+    <!-- <p>--Private MusicRoom Playlist--</p> -->
+        <div id="private_label">
+            {% for j in private_list %}
+              {% if j.playlist_owner == user %}
+                <p id={{j.id}}>
+                    <div id={{j.id}} class="section--body--item album--item">
+                        <div class="section--body--item--img">
+                           <img src="{% static 'images/youtube-vibes-logo.png' %}" alt="default_pic" width="150" height="150">
+                        </div>
+                        <p class="section--body--item--title">{{j.playlist_name}}</p>
+                        <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}</a>
+                        <p class="section--body--item--subtitle"><a href="#">{{j.playlist_owner}}</a></p>
+                        <div class="section--body--item--play">
+                            <i class="lni lni-play"></i>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
         </div>
     </section>
 </main>
