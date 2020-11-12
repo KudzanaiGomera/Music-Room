@@ -63,8 +63,27 @@ def logoutUser(request):
     return redirect('login2')
 
 def music(request):
-
-    return render(request, 'music.html')
+     # playlist = Playlist.objects.all()
+    all_users = User.objects.all()
+    all_users = all_users.exclude(username=request.user.username)#remove this if issues
+    public_list = Playlist.objects.filter(playlist_status='Public')
+    private_list = Playlist.objects.filter(playlist_status='Private')
+    for k in private_list:
+        Found = ""
+        user_array=k.playlist_members.split(',')
+        for j in user_array:
+            if(j==request.user.username):
+                Found = "Match"
+        if (Found != "Match"):
+            private_list=private_list.exclude(playlist_name=k.playlist_name)
+    json_user = serialize('json',all_users,fields=['username'])
+    context ={
+        "public_list" : public_list,
+        "private_list" : private_list,
+        "all_users":all_users,
+       "json_user":json_user,
+    }
+    return render(request,"music.html",context)
 
 def profile(request):
     if request.method == 'POST':
