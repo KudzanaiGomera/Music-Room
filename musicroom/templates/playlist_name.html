@@ -30,17 +30,18 @@
       <form method="POST" >{% csrf_token %}
         <p>Search music<input id="search_artist" name="search_artist" type="text" placeholder="Enter artist/track.."></p>
         <button id="artist_enter" onclick="openNav2()">Enter</button>
-        <button id="clear_search_results" name="clear_search_results">Clear search</button>
+        <!-- <button id="clear_search_results" name="clear_search_results">Clear search</button> -->
       </form>
       <br>
       {% if artist_value%}
         <div id="artist_info">
+          <h3>--Search results--</h3>
         {% for k in artist_value%}
-          <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.artist_id}},{{k.title}},{{k.artist_name}},{{k.album_title}},{{k.duration}}" onclick="api_add_track_playlist(`{{k.artist_id}}`)">+</button></p>
+        <br>
+        <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><h3>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.artist_id}},{{k.title}},{{k.artist_name}},{{k.album_title}},{{k.duration}}" onclick="api_add_track_playlist(`{{k.artist_id}}`)">+</button><h3>Album: {{k.album_title}}</h3></h3>
           <!-- <img id="artist_image" src="{{k.album_art}}" alt="default_pic" width="140" height="140"><p>Title: {{ k.title}} - {{ k.duration }}  <button id="artist_search_add" value="{{k.title}}  |  {{k.artist_name}}|{{k.album_title}}   | {{k.duration}}" onclick="api_api_add_track_playlist(`{{k.artist_id}}`)">+</button></p> -->
           <hr></hr>
           {% endfor %}
-          <button>More</button>
         </div> 
       {% endif %}
     </div>
@@ -71,12 +72,13 @@
             console.log(results)
             create_div.innerHTML=results
             if (results != playlist_owner)
-            {var create_btn = document.createElement('button')
-            create_btn.appendChild(document.createTextNode('remove user'))
-            create_div.appendChild(create_btn)}
-            name_div.appendChild(create_hr)
-            name_div.appendChild(create_div)
-            name_div.appendChild(create_hr)
+            {
+              var create_btn = document.createElement('button')
+              create_btn.appendChild(document.createTextNode('Give playlist rights'))
+              create_div.appendChild(create_btn)}
+              name_div.appendChild(create_hr)
+              name_div.appendChild(create_div)
+              name_div.appendChild(create_hr)
 
           })
           
@@ -99,7 +101,7 @@
   </h1>
   {% for k in private_list%}
     <img src="{% static 'images/private_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{k.playlist_status}} : 
-    <a href="#" onclick="This user:();return false  ">List of users</a>
+    <a href="#" onclick="edit_user();return false  ">List of users</a>
   {% endfor %}
   {% for j in public_list%}
     <img src="{% static 'images/public_img.png' %}" alt="default_pic" width="40" height="40" style="filter:invert(100%)">{{j.playlist_status}}

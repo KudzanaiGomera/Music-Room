@@ -8,7 +8,7 @@ body {
 
 div#artist_info{
   overflow-y: scroll;
-  height: 200px;
+  height: 400px;
   width: 800px;
   margin: auto;
 }

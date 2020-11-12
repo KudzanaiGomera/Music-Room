@@ -67,7 +67,7 @@ def playlist_name(request,playlist_name):#Get playlist name + search_results
     if request.method == 'POST' and request.POST['search_artist']:
         name = request.POST['search_artist']
         print("Searching for user :",name)
-        search_url2 = 'https://api.deezer.com/search/track?q=' + str(name)+'&limit=10'
+        search_url2 = 'https://api.deezer.com/search/track?q=' + str(name)
         json_response = requests.get(search_url2).json()
         info = json_response['data']
         for k in info:
