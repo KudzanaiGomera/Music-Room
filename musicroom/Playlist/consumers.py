@@ -21,6 +21,7 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
         playlist_pk=text_data_json['playlist_pk']
         status=text_data_json['status']
         host=text_data_json['host']
+       
         # Playlist()
 
         await self.channel_layer.group_send(
@@ -32,6 +33,7 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
                  'playlist_pk':playlist_pk,
                  'status':status,
                  'host':host,
+                 
             }
         )
     async def playlist_name_build(self,event):
@@ -40,13 +42,16 @@ class Playlist_view_consumer(AsyncWebsocketConsumer):
         playlist_pk=event['playlist_pk'],
         status=event['status'],
         host = event['host'],
+       
 
         await self.send(text_data=json.dumps({
             'playlist_name':playlist_name,
             'delete_playlist':delete_playlist,
             'playlist_pk':playlist_pk,
             'status':status,
-            'host':host
+            'host':host,
+           
+
         }))
     
 
@@ -76,6 +81,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
         duration = text_data_json['duration'],
         user_name = text_data_json['user_name'],
         delete_song = text_data_json['delete_song'],
+        permission=text_data_json['permission'],
         # vote_count = text_data_json['vote_count'],
 
         await self.channel_layer.group_send(
@@ -89,6 +95,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
                 'duration':duration,
                 'user_name':user_name,
                 'delete_song':delete_song,
+                'permission':permission,
                 # 'vote_count':vote_count,
             }
         )
@@ -100,6 +107,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
         duration=event['duration'],
         user_name= event['user_name'],
         delete_song= event['delete_song'],
+        permission=event['permission'],
         # vote_count = event['vote_count'],
 
         await self.send(text_data=json.dumps({
@@ -110,6 +118,7 @@ class PlaylistConsumer(AsyncWebsocketConsumer):
             'duration':duration,
             'user_name': user_name,
             'delete_song':delete_song,
+            'permission':permission,
             # 'vote_count':vote_count,
         }))
 

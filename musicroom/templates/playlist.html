@@ -114,7 +114,7 @@
           {% endif %}
           <a class="private" href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}</a>
           {% if j.playlist_owner == user %} 
-          <button class="stylebtn" name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+          <button  name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
           {% endif %}
         {% endfor %}
         </div>
@@ -160,6 +160,10 @@
 </html>
 <script>
   const playlist_Socket= new WebSocket("ws://" + window.location.host + "/ws/playlist_view/");
+  
+  
+  
+  
   function remove_socket_buttons(value)
   {
     Delete_playlist(value)

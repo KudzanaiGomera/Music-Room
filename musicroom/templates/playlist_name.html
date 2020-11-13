@@ -87,17 +87,15 @@
             create_div.innerHTML=results
             if (results != playlist_owner)
             {
-              var create_btn = document.createElement('input')
-              var create_btn2 = document.createElement('input')
-              create_btn.setAttribute('type', 'radio')
-              create_btn2.setAttribute('type', 'radio')
+              var create_btn = document.createElement('input')              
+              create_btn.setAttribute('type', 'checkbox')
               create_btn.setAttribute('class', 'permission_checkbox')
               // create_btn.setAttribute('onclick','Give_player_rights()')
               create_btn.setAttribute('name', 'permission_button')
               create_btn.setAttribute('id', results)
               create_btn.appendChild(document.createTextNode('Give playlist rights'))
               create_div.appendChild(create_btn)
-              create_div.appendChild(create_btn2)
+            
             }
               name_div.appendChild(create_hr)
               name_div.appendChild(create_div)
@@ -171,7 +169,7 @@
 <div id="controlers">
 	<!-- <input class="stylebtn" type="button" onclick="DZ.player.playAlbum(302127); return false;" value="Play Daft Punk - Discovery"/> -->
     <!-- <input class="stylebtn" type="button" onclick="DZ.player.playAlbum(301775); return false;" value="Play Daft Punk - Homework"/> -->
-    <input class="stylebtn" type="button" id="player_start" onload="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
+    <input class="stylebtn" type="button" id="player_start" onclick="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
 
 	<br/>
 	<!-- <input class="stylebtn" type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
@@ -199,27 +197,37 @@
   <div class="bar" style="width: 0%;"></div>
 </div>
 <script>
+  function display_control()
+  {
+    if (`{{user}}` == `{{playlist_host}}`)
+    {
+      dezzer_checkbox = document.getElementById('deezer_buttons')
+      dezzer_checkbox.style.display="block";
+    }
+  }
   function checkbox_permission()
   {
     get_check_box=document.querySelectorAll(".permission_checkbox")
     get_check_box.forEach(function(results){
-      results.addEventListener('click',function(){
-      results.click=false;
-      dezzer_checkbox = document.getElementById('deezer_buttons')
+    results.addEventListener('click',function(k){
+    dezzer_checkbox = document.getElementById('deezer_buttons')
+    playlist_Socket.send(JSON.stringify({
+      'message':'',
+      'track_id':'',
+      'artist_name':'',
+      'album_title':'',
+      'duration':'',
+      'user_name': '',
+      'permission':k.target.id,
+      'delete_song':''}));
+      
+      
       // if (dezzer_checkbox.style.display =="block")
           // dezzer_checkbox.style.display="hidden"
-      dezzer_checkbox.style.display="block"
+      //dezzer_checkbox.style.display="block"
     })
     })
-    // document.getElementById('deezer_buttons').style.display="block"
-    // .style.display="visible"
-    // $('.deezer_buttons').prop("disabled", !this.checked);
   }
-
-
-
-
-
 function show_tag()
 { 
     document.getElementById("tag_1").style.visibility ="hidden";
@@ -290,12 +298,20 @@ results.addEventListener('click',function(k)
     'album_title':tag_values[3],
     'duration':tag_values[4],
     'user_name': user_name,
+    'permission':'',
     'delete_song':''}));
 })})
 document.querySelector('#remove_song_id')   
 playlist_Socket.onmessage =function(e){
   const data = JSON.parse(e.data);
-  console.log('This is the data : ',data);
+  console.log('permission:',data.permission[0])
+  console.log('user:','{{user}}')
+  if (data.permission[0] ==`{{user}}`)
+  {
+    console.log('user match')
+    dezzer_checkbox = document.getElementById('deezer_buttons')
+    return dezzer_checkbox.style.display="block";
+  }
   var add_song= document.createElement("li");
   var remove_song = document.createElement("button");
   remove_song.appendChild(document.createTextNode('remove'));
@@ -409,17 +425,8 @@ function edit_user()
 {
   openNav()
 }
-  // end of script
-// function Give_player_rights()
-// {
-  // permission_check = document.querySelectorAll('#permission_button')
-  // permission_check.forEach(function(results)
-  // {
-    // results.addEventListener('click',function(k){
-    // console.log('temp value',temp);})
-  // }
-// }
 checkbox_permission()
+display_control()
 </script><br/>
 <!-- event_listener : <br/> -->
 <pre id="event_listener" style="height:100px;overflow:auto;"></pre>
