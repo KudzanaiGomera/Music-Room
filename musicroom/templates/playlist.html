@@ -23,7 +23,7 @@
         <li style="float:right; margin-right: 50px;"><a href="{% url 'logoutUser' %}"><i class="fas fa-sign-out-alt onright"></i>Logout</a></li>
       </ul>
   </nav>
-  <button class="dropdown--button" id="user">
+  <button class="stylebtn" class="dropdown--button" id="user">
     <span class="user-icon"><i class="lni-user"></i></span>
     <span class="text-bold">{{request.user}}</span>
   </button>
@@ -37,7 +37,7 @@
               <h id=message_users></h>
              
               <h4>Invite Users: <input id="user_input" type="text" placeholder="Add users..."></h4>
-              <button id="add_private_id"onclick="add_private_user()">Add user</button>
+              <button class="stylebtn" id="add_private_id"onclick="add_private_user()">Add user</button>
             <script>
                private_user_array=[`{{user}}`]
                console.log("Current list",private_user_array)
@@ -78,8 +78,8 @@
             </div> 
           <!-- code here -->
         </div>
-        <!-- <button id="Create_button" onclick="Create_playlist(private_user_array);closeNav()">Create</button> -->
-        <button id="Create_button">Create</button>
+        <!-- <button class="stylebtn" id="Create_button" onclick="Create_playlist(private_user_array);closeNav()">Create</button> -->
+        <button class="stylebtn" id="Create_button">Create</button>
       </div>
     </div>
 
@@ -96,11 +96,11 @@
           {% else %}
             <img src="{% static 'images/play_icon.png' %}" alt="default_pic" width="39" height="39">
           {% endif %}
-            <a href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}</a>
+            <a class="public" href="/playlist/{{k.playlist_name}}">{{k.playlist_name}}</a>
           {% if k.playlist_owner == user %}  
             <button name="Delete_playlist_button" id={{k.id}}>Delete</button>
           {% endif %}
-        <!-- <p>{{k.playlist_name}}<button id="Delete_playlist_button" value={{k.id}} onclick="Delete_playlist('{{k.id}}')">Delete</button></p> -->
+        <!-- <p>{{k.playlist_name}}<button class="stylebtn" id="Delete_playlist_button" value={{k.id}} onclick="Delete_playlist('{{k.id}}')">Delete</button></p> -->
         {% endfor %}
       </div>
       <div id="private_label">
@@ -112,15 +112,15 @@
           {% else %}
           <img src="{% static 'images/play_icon.png' %}" alt="default_pic" width="39" height="39">
           {% endif %}
-          <a href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}</a>
+          <a class="private" href="/playlist/{{j.playlist_name}}">{{j.playlist_name}}</a>
           {% if j.playlist_owner == user %} 
-          <button name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
+          <button class="stylebtn" name="Delete_playlist_button" id={{j.id}}>Delete</button></p>
           {% endif %}
         {% endfor %}
         </div>
         <!-- Search:<input><br> -->
-        <!-- <button>Search</button> -->
-        <br><br><button onclick="openNav()">Create Playlist</button>
+        <!-- <button>class="stylebtn" Search</button> -->
+        <br><br><button class="stylebtn" onclick="openNav()">Create Playlist</button>
       
       <p>{{form}}</p>
       <!-- <h>List of Playlist</h> -->
@@ -147,10 +147,10 @@
               </div>
           </div>
           <!-- <div class="bottom-bar--left-col--actions">
-              <button class="bottom-bar--left-col--actions--favorite">
+              <button class="stylebtn" class="bottom-bar--left-col--actions--favorite">
                   <i class='lni lni-heart'></i>
               </button>
-              <button class="bottom-bar--left-col--actions--pip">
+              <button class="stylebtn" class="bottom-bar--left-col--actions--pip">
                   <i class="pip-icon"></i>
               </button>
           </div> -->

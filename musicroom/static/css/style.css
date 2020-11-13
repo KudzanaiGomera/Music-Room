@@ -6,6 +6,26 @@ body {
   color: white;
 }
 
+.private {
+  color:#1db954;
+  text-decoration: none;
+}
+
+.priavte:hover {
+  color:#fff;
+  text-decoration: none;
+}
+
+.public {
+  color:#1db954;
+  text-decoration: none;
+}
+
+.public:hover {
+  color:#fff;
+  text-decoration: none;
+}
+
 div#artist_info{
   overflow-y: scroll;
   height: 400px;
@@ -130,4 +150,20 @@ div#artist_info{
   float:right;
   margin-top:30px;
   background-color: #1db954;
+}
+
+.stylebtn {
+  background-color: #1db954;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.stylebtn:hover {
+  background-color: white;
+  color: #1db954;
+  border:none;
 }

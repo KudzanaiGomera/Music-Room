@@ -15,9 +15,23 @@
 			cursor:pointer;background: #4496C6;width: 0;height: 8px;color: white;font-size: 12px;text-align: center;text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);-webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);-moz-box-shadow: inset 0 -1px 0 rgba(0,0,0,0.15);box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);-webkit-box-sizing: border-box;-moz-box-sizing: border-box;box-sizing: border-box;-webkit-transition: width .6s ease;-moz-transition: width .6s ease;-ms-transition: width .6s ease;-o-transition: width .6s ease;transition: width .6s ease;
 		}
   </style>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/> 
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    <link rel="stylesheet" href="https://cdn.lineicons.com/1.0.1/LineIcons.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.10.2/css/all.css">
 </head>
 <body>
+  <nav>
+    <ul class="navigation">
+      <li style="float:left"><a href="{% url 'music' %}"><i class="fas fa-house-damage onleft" ></i>Music Room</a></li>
+      <li style="float:right; margin-right: 50px;"><a href="{% url 'logoutUser' %}"><i class="fas fa-sign-out-alt onright"></i>Logout</a></li>
+    </ul>
+</nav>
+<button class="stylebtn" class="dropdown--button" id="user">
+  <span class="user-icon"><i class="lni-user"></i></span>
+  <span class="text-bold">{{request.user}}</span>
+</button>
 <div id="dz-root"></div>
 <div id="player" style="width:100%;" align="center"> 
 </div>
@@ -74,12 +88,17 @@
             if (results != playlist_owner)
             {
               var create_btn = document.createElement('input')
-              create_btn.setAttribute('type', 'checkbox')
-              create_btn.setAttribute('onclick','Give_player_rights()')
+              var create_btn2 = document.createElement('input')
+              create_btn.setAttribute('type', 'radio')
+              create_btn2.setAttribute('type', 'radio')
+              create_btn.setAttribute('class', 'permission_checkbox')
+              // create_btn.setAttribute('onclick','Give_player_rights()')
               create_btn.setAttribute('name', 'permission_button')
               create_btn.setAttribute('id', results)
               create_btn.appendChild(document.createTextNode('Give playlist rights'))
-              create_div.appendChild(create_btn)}
+              create_div.appendChild(create_btn)
+              create_div.appendChild(create_btn2)
+            }
               name_div.appendChild(create_hr)
               name_div.appendChild(create_div)
               name_div.appendChild(create_hr)
@@ -93,8 +112,7 @@
       </div>
     </div>
 
-    <a href="/playlist_view">Back to Playlist</a>
-    <a href="/music.html">Home</a>
+    <a href="/playlist_view" class="fab fa-spotify" style="color:#1db954; text-decoration:none;">Back to Playlist</a>
   <h1>
   {% if user == playlist_host %}
     <img src="{% static 'images/admin_img.png' %}" alt="default_pic" width="25" height="25" style="filter:invert(100%)">[Host]
@@ -120,7 +138,12 @@
   {{ playlist_name |json_script:"playlist-name"}}
   {{ request.user.username| json_script:"user-username" }}
 {% if playlist_status == 'Private' or user == playlist_host %}
-  <button id="Search_results" onclick="openNav2()"> Add tracks to Playlist</button>
+  <button id="Search_results" onclick="openNav2()" style="background: linear-gradient(#f36482, #f8bf4a); color: black;
+  border: none;
+  border-radius: 50px;
+  text-align: center;
+  padding: 5px;
+  cursor: pointer"> Add tracks to Playlist</button>
 {% endif %}
 
 <pre>   Title   |   Album   |   Artist   |   Duration   | </pre>  
@@ -146,23 +169,29 @@
 </div> 
 <!-- //////////////////////////// -->
 <div id="controlers">
-	<!-- <input type="button" onclick="DZ.player.playAlbum(302127); return false;" value="Play Daft Punk - Discovery"/> -->
-    <!-- <input type="button" onclick="DZ.player.playAlbum(301775); return false;" value="Play Daft Punk - Homework"/> -->
-    <input type="button" id="player_start" onload="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
+	<!-- <input class="stylebtn" type="button" onclick="DZ.player.playAlbum(302127); return false;" value="Play Daft Punk - Discovery"/> -->
+    <!-- <input class="stylebtn" type="button" onclick="DZ.player.playAlbum(301775); return false;" value="Play Daft Punk - Homework"/> -->
+    <input class="stylebtn" type="button" id="player_start" onload="DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;" value="Play My playlist"/>
 
 	<br/>
-	<!-- <input type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
-	<!-- <input type="button" onclick="DZ.player.playSmartRadio(13); return false;" value="Play Smart Radio"/> -->
-	<h1 id="tag_1"> Test1</h1> <button onclick="show_tag()">Show</button>
-	<br/>
-	<input id="button" type="button" onclick="DZ.player.play(); return false;" value="play"/>
-	<input type="button" onclick="DZ.player.pause(); return false;" value="pause"/>
-	<input type="button" onclick="DZ.player.prev(); return false;" value="prev"/>
-  <input type="button" onclick="DZ.player.next(); return false;" value="next"/>
-  <input type="button" onclick="DZ.player.seek(50); return false;" value="test"/>
-	<br/>
-	<!-- <input type="button" onclick="DZ.player.setVolume(20); return false;" value="set Volume 20"/> -->
-	<!-- <input type="button" onclick="DZ.player.setVolume(80); return false;" value="set Volume 80"/> -->
+	<!-- <input class="stylebtn" type="button" onclick="DZ.player.playRadio(203); return false;" value="Play Radio"/> -->
+	<!-- <input class="stylebtn" type="button" onclick="DZ.player.playSmartRadio(13); return false;" value="Play Smart Radio"/> -->
+
+  <br/>
+  <div id="deezer_buttons" hidden>
+    <input class="stylebtn" id="button" type="button" onclick="DZ.player.play(); return false;" value="play"/>
+    <input class="stylebtn" type="button" onclick="DZ.player.pause(); return false;" value="pause"/>
+    <input class="stylebtn" type="button" onclick="DZ.player.prev(); return false;" value="prev"/>
+    <input class="stylebtn" type="button" onclick="DZ.player.next(); return false;" value="next"/>
+    <br/>
+  </div>
+	
+	
+	
+  
+	
+	<!-- <input class="stylebtn" type="button" onclick="DZ.player.setVolume(20); return false;" value="set Volume 20"/> -->
+	<!-- <input class="stylebtn" type="button" onclick="DZ.player.setVolume(80); return false;" value="set Volume 80"/> -->
 	
 	<br/><br/><br/>
 </div>
@@ -170,8 +199,27 @@
   <div class="bar" style="width: 0%;"></div>
 </div>
 <script>
-  console.log(`{{playlist_host}}`)
-  console.log(`{{user}}`)
+  function checkbox_permission()
+  {
+    get_check_box=document.querySelectorAll(".permission_checkbox")
+    get_check_box.forEach(function(results){
+      results.addEventListener('click',function(){
+      results.click=false;
+      dezzer_checkbox = document.getElementById('deezer_buttons')
+      // if (dezzer_checkbox.style.display =="block")
+          // dezzer_checkbox.style.display="hidden"
+      dezzer_checkbox.style.display="block"
+    })
+    })
+    // document.getElementById('deezer_buttons').style.display="block"
+    // .style.display="visible"
+    // $('.deezer_buttons').prop("disabled", !this.checked);
+  }
+
+
+
+
+
 function show_tag()
 { 
     document.getElementById("tag_1").style.visibility ="hidden";
@@ -189,7 +237,7 @@ function show_tag()
 		for (var i = 0; i < arguments.length; i++) {
 			line.push(arguments[i]);
 		}
-		pre.innerHTML += line.join(' ') + "\n";
+		// pre.innerHTML += line.join(' ') + "\n";
 	}
 	function onPlayerLoaded() {
 		$("#controlers input").attr('disabled', false);
@@ -251,7 +299,6 @@ playlist_Socket.onmessage =function(e){
   var add_song= document.createElement("li");
   var remove_song = document.createElement("button");
   remove_song.appendChild(document.createTextNode('remove'));
-  // remove_song.setAttribute('content','test1');
   var song_input=data.message[0];
   remove_song.setAttribute('id','remove_song_id');
   add_song.setAttribute('id',data.track_id[0]);
@@ -372,8 +419,10 @@ function edit_user()
     // console.log('temp value',temp);})
   // }
 // }
+checkbox_permission()
 </script><br/>
-event_listener : <br/>
+<!-- event_listener : <br/> -->
 <pre id="event_listener" style="height:100px;overflow:auto;"></pre>
+
 </body>
 </html>
