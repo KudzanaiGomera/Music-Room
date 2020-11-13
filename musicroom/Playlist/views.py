@@ -90,7 +90,7 @@ def playlist_name(request,playlist_name):#Get playlist name + search_results
         playlist_status=q['playlist_status']
 
     # fetch songs from playlist  when  pages refresh from API
-    songs_on_playlist_api= 'https://api.deezer.com/playlist/'+str(playlist_id)+'/tracks'+'&access_token='+request.session.get('access_token')
+    songs_on_playlist_api= 'https://api.deezer.com/playlist/'+str(playlist_id)+'/tracks' 
     json_response = requests.get(songs_on_playlist_api).json()
     info2 = json_response['data']
     for k in info2:
