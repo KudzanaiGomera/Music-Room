@@ -94,7 +94,8 @@
               create_btn.setAttribute('name', 'permission_button')
               create_btn.setAttribute('id', results)
               create_btn.appendChild(document.createTextNode('Give playlist rights'))
-              create_div.appendChild(create_btn)
+              if (`{{user}}` == `{{playlist_host}}`)
+                  create_div.appendChild(create_btn)
             
             }
               name_div.appendChild(create_hr)
@@ -197,6 +198,22 @@
   <div class="bar" style="width: 0%;"></div>
 </div>
 <script>
+  var storedArray = JSON.parse(sessionStorage.getItem(`{{playlist_name}}`));
+  var i;
+  if (storedArray)
+  {
+    for (i = 0; i < storedArray.length; i++) {
+           if (storedArray[i] == `{{user}}`)
+           {
+            dezzer_checkbox = document.getElementById('deezer_buttons')
+            dezzer_checkbox.style.display="block";
+           }
+        }
+  }
+  
+  
+  
+  // console.log('this is the value',$.cookie('temp'))
   function display_control()
   {
     if (`{{user}}` == `{{playlist_host}}`)
@@ -301,14 +318,17 @@ results.addEventListener('click',function(k)
     'permission':'',
     'delete_song':''}));
 })})
-document.querySelector('#remove_song_id')   
+document.querySelector('#remove_song_id')
+var array_player_control = []   
 playlist_Socket.onmessage =function(e){
   const data = JSON.parse(e.data);
   console.log('permission:',data.permission[0])
   console.log('user:','{{user}}')
   if (data.permission[0] ==`{{user}}`)
   {
-    console.log('user match')
+    array_player_control.push(data.permission[0])
+    window.sessionStorage.setItem(`{{playlist_name}}`, JSON.stringify(array_player_control));
+    // $.cookie('temp',array_player_control)
     dezzer_checkbox = document.getElementById('deezer_buttons')
     return dezzer_checkbox.style.display="block";
   }
@@ -363,6 +383,7 @@ playlist_Socket.onmessage =function(e){
       'album_title':'',
       'duration':'',
       'user_name': '',
+      'permission':'',
       'delete_song':messageInputDom,
       }));
       // DZ.player.playPlaylist(parseInt(`{{playlist_id}}`)); return false;
